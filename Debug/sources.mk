@@ -28,6 +28,7 @@ CPP_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 src \
+src/u8g \
 system/src/cmsis \
 system/src/cortexm \
 system/src/diag \

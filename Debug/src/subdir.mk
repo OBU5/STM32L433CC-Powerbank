@@ -4,17 +4,41 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../src/ADC.c \
+../src/BTN.c \
+../src/GPIO.c \
+../src/TMR.c \
+../src/config.c \
+../src/events.c \
+../src/lcd.c \
 ../src/main.c \
+../src/power.c \
 ../src/stm32l4xx_hal_msp.c \
 ../src/stm32l4xx_it.c 
 
 OBJS += \
+./src/ADC.o \
+./src/BTN.o \
+./src/GPIO.o \
+./src/TMR.o \
+./src/config.o \
+./src/events.o \
+./src/lcd.o \
 ./src/main.o \
+./src/power.o \
 ./src/stm32l4xx_hal_msp.o \
 ./src/stm32l4xx_it.o 
 
 C_DEPS += \
+./src/ADC.d \
+./src/BTN.d \
+./src/GPIO.d \
+./src/TMR.d \
+./src/config.d \
+./src/events.d \
+./src/lcd.d \
 ./src/main.d \
+./src/power.d \
 ./src/stm32l4xx_hal_msp.d \
 ./src/stm32l4xx_it.d 
 
