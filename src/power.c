@@ -8,8 +8,9 @@
 #include "power.h"
 #include "config.h"
 
-uint8_t outVoltageStatus;
-uint8_t chargerCurrentStatus;
+OutVoltageStatus outVoltageStatus;
+ChargerCurrentStatus chargerCurrentStatus;
+
 
 void powerInit() {
 	chargerCurrentStatus = -1;
@@ -21,7 +22,6 @@ void powerInit() {
 	changeStateOfGPIO(&FET_BuckConv_EN, 0);
 }
 
-
 void chargerCurrentOFF() {
 	chargerCurrentStatus = 0;
 	changeChargerCurrent();
@@ -30,13 +30,11 @@ void chargerCurrentOFF() {
 void increaseChargerCurrent() {
 	if (chargerCurrentStatus < MAX_CHARGER_CURRENT_STATUS)
 		chargerCurrentStatus++;
-	changeChargerCurrent();
 }
 
 void reduceChargerCurrent() {
 	if (chargerCurrentStatus > 0)
 		chargerCurrentStatus--;
-	changeChargerCurrent();
 
 }
 
@@ -46,20 +44,28 @@ void goRoundChargerCurrent() {
 	else
 		chargerCurrentStatus = 0;
 	changeChargerCurrent();
+}
+
+void setChargerCurrent(ChargerCurrentStatus status) {
+	if (status >= 0 && status <= MAX_CHARGER_CURRENT_STATUS)
+		chargerCurrentStatus = status;
+	else
+		chargerCurrentStatus = 0;
+	changeChargerCurrent();
 
 }
 
 void changeChargerCurrent() {
 	switch (chargerCurrentStatus) {
-	case 0:
+	case _0mA:
 		changeStateOfGPIO(&FET_Charger_CurrentMode, 0);
 		changeStateOfGPIO(&CHRG_nSHDN, 0);
 		break;
-	case 1:
+	case _200mA:
 		changeStateOfGPIO(&FET_Charger_CurrentMode, 0);
 		changeStateOfGPIO(&CHRG_nSHDN, 1);
 		break;
-	case 2:
+	case _2A:
 		changeStateOfGPIO(&FET_Charger_CurrentMode, 1);
 		changeStateOfGPIO(&CHRG_nSHDN, 1);
 		break;
@@ -93,29 +99,38 @@ void goRoundOutVoltage() {
 
 }
 
+void setOutVoltage(OutVoltageStatus status) {
+	if (status >= 0 && status <= MAX_OUT_VOLTAGE_STATUS)
+		outVoltageStatus = status;
+	else
+		outVoltageStatus = 0;
+	changeOutVoltage();
+
+}
+
 void changeOutVoltage() {
 	switch (outVoltageStatus) {
-	case 0:
+	case _0V:
 		changeStateOfGPIO(&FET_BuckConv_5V, 0);
 		changeStateOfGPIO(&FET_BuckConv_9V, 0);
 		changeStateOfGPIO(&FET_BuckConv_12V, 0);
 		changeStateOfGPIO(&FET_BuckConv_EN, 0);
 
 		break;
-	case 1:
+	case _3_3V:
 		changeStateOfGPIO(&FET_BuckConv_5V, 1);
 		changeStateOfGPIO(&FET_BuckConv_9V, 0);
 		changeStateOfGPIO(&FET_BuckConv_12V, 0);
 		changeStateOfGPIO(&FET_BuckConv_EN, 1);
 		break;
-	case 2:
+	case _5V:
 		changeStateOfGPIO(&FET_BuckConv_5V, 0);
 		changeStateOfGPIO(&FET_BuckConv_9V, 1);
 		changeStateOfGPIO(&FET_BuckConv_12V, 0);
 		changeStateOfGPIO(&FET_BuckConv_EN, 1);
 
 		break;
-	case 3:
+	case _11_5V:
 		changeStateOfGPIO(&FET_BuckConv_5V, 0);
 		changeStateOfGPIO(&FET_BuckConv_9V, 0);
 		changeStateOfGPIO(&FET_BuckConv_12V, 1);

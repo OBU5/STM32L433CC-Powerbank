@@ -34,7 +34,7 @@ src/ADC.o: ../src/ADC.c ../src/ADC.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_tim_ex.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart_ex.h ../src/config.h \
- ../src/GPIO.h ../src/BTN.h ../src/TMR.h
+ ../src/GPIO.h ../src/TMR.h ../src/cell.h
 
 ../src/ADC.h:
 
@@ -114,6 +114,6 @@ src/ADC.o: ../src/ADC.c ../src/ADC.h \
 
 ../src/GPIO.h:
 
-../src/BTN.h:
-
 ../src/TMR.h:
+
+../src/cell.h:

@@ -12,7 +12,7 @@
 #include "config.h"
 
 typedef enum {
-	OFF, ON
+	OFF, ON, SHORT, LONG
 } TMRstate;
 
 struct TMR {

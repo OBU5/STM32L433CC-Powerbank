@@ -5,9 +5,9 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../src/ADC.c \
-../src/BTN.c \
 ../src/GPIO.c \
 ../src/TMR.c \
+../src/cell.c \
 ../src/config.c \
 ../src/events.c \
 ../src/lcd.c \
@@ -18,9 +18,9 @@ C_SRCS += \
 
 OBJS += \
 ./src/ADC.o \
-./src/BTN.o \
 ./src/GPIO.o \
 ./src/TMR.o \
+./src/cell.o \
 ./src/config.o \
 ./src/events.o \
 ./src/lcd.o \
@@ -31,9 +31,9 @@ OBJS += \
 
 C_DEPS += \
 ./src/ADC.d \
-./src/BTN.d \
 ./src/GPIO.d \
 ./src/TMR.d \
+./src/cell.d \
 ./src/config.d \
 ./src/events.d \
 ./src/lcd.d \

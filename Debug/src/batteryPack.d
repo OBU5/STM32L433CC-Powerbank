@@ -1,5 +1,5 @@
-src/GPIO.o: ../src/GPIO.c ../src/GPIO.h \
- ../system/include/stm32l4xx/stm32l4xx_hal.h \
+src/batteryPack.o: ../src/batteryPack.c ../src/batteryPack.h \
+ ../src/config.h ../system/include/stm32l4xx/stm32l4xx_hal.h \
  ../include/stm32l4xx_hal_conf.h ../include/main.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_rcc.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_def.h \
@@ -33,10 +33,12 @@ src/GPIO.o: ../src/GPIO.c ../src/GPIO.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_tim.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_tim_ex.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart.h \
- ../system/include/stm32l4xx/stm32l4xx_hal_uart_ex.h ../src/config.h \
- ../src/ADC.h ../src/TMR.h ../src/cell.h
+ ../system/include/stm32l4xx/stm32l4xx_hal_uart_ex.h ../src/ADC.h \
+ ../src/GPIO.h ../src/TMR.h
 
-../src/GPIO.h:
+../src/batteryPack.h:
+
+../src/config.h:
 
 ../system/include/stm32l4xx/stm32l4xx_hal.h:
 
@@ -110,10 +112,8 @@ src/GPIO.o: ../src/GPIO.c ../src/GPIO.h \
 
 ../system/include/stm32l4xx/stm32l4xx_hal_uart_ex.h:
 
-../src/config.h:
-
 ../src/ADC.h:
 
-../src/TMR.h:
+../src/GPIO.h:
 
-../src/cell.h:
+../src/TMR.h:

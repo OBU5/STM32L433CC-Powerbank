@@ -34,7 +34,7 @@ src/config.o: ../src/config.c ../src/config.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_tim_ex.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart_ex.h ../src/ADC.h \
- ../src/GPIO.h ../src/BTN.h ../src/TMR.h ../include/stm32l4xx_it.h
+ ../src/GPIO.h ../src/TMR.h ../src/cell.h ../include/stm32l4xx_it.h
 
 ../src/config.h:
 
@@ -114,8 +114,8 @@ src/config.o: ../src/config.c ../src/config.h \
 
 ../src/GPIO.h:
 
-../src/BTN.h:
-
 ../src/TMR.h:
+
+../src/cell.h:
 
 ../include/stm32l4xx_it.h:

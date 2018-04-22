@@ -18,7 +18,6 @@ typedef enum {
 
 struct ADC {
 	float currValue;
-	float prevValue;
 	float minValue;
 	float maxValue;
 	float avgValue;

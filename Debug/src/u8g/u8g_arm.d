@@ -35,8 +35,8 @@ src/u8g/u8g_arm.o: ../src/u8g/u8g_arm.c ../src/u8g/u8g_arm.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_tim_ex.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart_ex.h ../src/u8g/../ADC.h \
- ../src/u8g/../config.h ../src/u8g/../GPIO.h ../src/u8g/../BTN.h \
- ../src/u8g/../TMR.h
+ ../src/u8g/../config.h ../src/u8g/../GPIO.h ../src/u8g/../TMR.h \
+ ../src/u8g/../cell.h
 
 ../src/u8g/u8g_arm.h:
 
@@ -122,6 +122,6 @@ src/u8g/u8g_arm.o: ../src/u8g/u8g_arm.c ../src/u8g/u8g_arm.h \
 
 ../src/u8g/../GPIO.h:
 
-../src/u8g/../BTN.h:
-
 ../src/u8g/../TMR.h:
+
+../src/u8g/../cell.h:

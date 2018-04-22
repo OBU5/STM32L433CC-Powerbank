@@ -12,7 +12,7 @@
 void initLCD();
 
 void printADC(struct ADC* adc, uint16_t x, uint16_t y);
-
+void printADCFloat(char adcName[5], float adcValue, char adcQuantiti, uint16_t x, uint16_t y);
 void writeAllOnLCD();
 
 

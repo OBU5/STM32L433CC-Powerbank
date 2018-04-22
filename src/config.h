@@ -4,12 +4,13 @@
 #include "stm32l4xx_hal.h"
 #include "ADC.h"
 #include "GPIO.h"
-#include "BTN.h"
 #include "TMR.h"
+#include "cell.h"
 
 //-----------------------------------------------------------------
 //OUT
 //-----------------------------------------------------------------
+
 
 struct GPIO FET_HoldOn;
 struct GPIO LCD_RST;
@@ -45,14 +46,24 @@ struct ADC voltageBat;
 struct ADC Vrefint;
 
 
-struct TMR button1Timer;
-struct TMR button2Timer;
-struct TMR button3Timer;
+struct TMR btn1Timer;
+struct TMR btn2Timer;
+struct TMR btn3Timer;
 struct TMR integralTimer;
 struct TMR idleTimer;
 
+
+
+struct cell cell1;
+struct cell cell2;
+struct cell cell3;
+struct cell cell4;
+
+
+
 #define MAX_OUT_VOLTAGE_STATUS 3
 #define MAX_CHARGER_CURRENT_STATUS 2
+#define MAX_LCD_STATUS 6
 
 //-----------------------------------------------------------------
 //IN
@@ -72,6 +83,16 @@ extern SPI_HandleTypeDef SPI_HANDLER;
 #define TS_CAL2 ((uint16_t*)((uint32_t) 0x1FFF75CA))
 #define V_REF 3.3
 #define ADC_DISTORTION 4096
+#define SHORT_TIME_LIMIT 50 //in milliseconds
+#define LONG_TIME_LIMIT 1000 //in milliseconds
+#define MAX_CELL_VOLTAGE 4.2 //in milliseconds
+#define MIN_CELL_VOLTAGE 3 //in milliseconds
+
+#define VOLTAGE_AT_LOW_PERCENT_OF_CAPACITY  3.25//in milliseconds
+#define VOLTAGE_AT_HIGH_PERCENT_OF_CAPACITY 4.2//in milliseconds
+#define CELL_CAPACITY 2400
+#define HIGH_PERCENT_OF_CAPACITY 100
+#define LOW_PERCENT_OF_CAPACITY 15
 
 
 void initGPIOs();

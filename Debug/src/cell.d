@@ -1,4 +1,4 @@
-src/BTN.o: ../src/BTN.c ../src/BTN.h \
+src/cell.o: ../src/cell.c ../src/cell.h ../src/config.h \
  ../system/include/stm32l4xx/stm32l4xx_hal.h \
  ../include/stm32l4xx_hal_conf.h ../include/main.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_rcc.h \
@@ -33,10 +33,12 @@ src/BTN.o: ../src/BTN.c ../src/BTN.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_tim.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_tim_ex.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart.h \
- ../system/include/stm32l4xx/stm32l4xx_hal_uart_ex.h ../src/config.h \
- ../src/ADC.h ../src/GPIO.h ../src/TMR.h
+ ../system/include/stm32l4xx/stm32l4xx_hal_uart_ex.h ../src/ADC.h \
+ ../src/GPIO.h ../src/TMR.h
 
-../src/BTN.h:
+../src/cell.h:
+
+../src/config.h:
 
 ../system/include/stm32l4xx/stm32l4xx_hal.h:
 
@@ -109,8 +111,6 @@ src/BTN.o: ../src/BTN.c ../src/BTN.h \
 ../system/include/stm32l4xx/stm32l4xx_hal_uart.h:
 
 ../system/include/stm32l4xx/stm32l4xx_hal_uart_ex.h:
-
-../src/config.h:
 
 ../src/ADC.h:
 
