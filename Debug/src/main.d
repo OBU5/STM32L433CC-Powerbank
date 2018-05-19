@@ -34,7 +34,8 @@ src/main.o: ../src/main.c ../include/main.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_tim_ex.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart_ex.h ../src/config.h \
- ../src/ADC.h ../src/GPIO.h ../src/TMR.h ../src/cell.h ../src/events.h
+ ../src/ADC.h ../src/GPIO.h ../src/TMR.h ../src/cell.h ../src/events.h \
+ ../src/lcd.h
 
 ../include/main.h:
 
@@ -121,3 +122,5 @@ src/main.o: ../src/main.c ../include/main.h \
 ../src/cell.h:
 
 ../src/events.h:
+
+../src/lcd.h:

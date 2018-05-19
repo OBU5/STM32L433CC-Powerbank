@@ -7,6 +7,13 @@
 #include "TMR.h"
 #include "cell.h"
 
+
+
+
+
+
+
+
 //-----------------------------------------------------------------
 //OUT
 //-----------------------------------------------------------------
@@ -31,19 +38,19 @@ struct GPIO BTN_2;
 struct GPIO BTN_3;
 
 
-
-struct ADC voltageCell1P;
-struct ADC voltageCell2P;
-struct ADC voltageCell3P;
-struct ADC voltageCell4P;
-struct ADC tempCell;
-struct ADC tempBalancer;
-struct ADC voltageAdapter;
-struct ADC currentCharge;
-struct ADC currentDischarge;
-struct ADC tempMCU;
-struct ADC voltageBat;
-struct ADC Vrefint;
+// volatile, besouce is used ADC DMA mode
+volatile struct ADC voltageCell1P;
+volatile struct ADC voltageCell2P;
+volatile struct ADC voltageCell3P;
+volatile struct ADC voltageCell4P;
+volatile struct ADC tempCell;
+volatile struct ADC tempBalancer;
+volatile struct ADC voltageAdapter;
+volatile struct ADC currentCharge;
+volatile struct ADC currentDischarge;
+volatile struct ADC tempMCU;
+volatile struct ADC voltageBat;
+volatile struct ADC Vrefint;
 
 
 struct TMR btn1Timer;
@@ -60,10 +67,23 @@ struct cell cell3;
 struct cell cell4;
 
 
+#define TMR_BUTTON_CONST 5
+#define TMR_INTEGRAL_CONST 50
 
-#define MAX_OUT_VOLTAGE_STATUS 3
+
+#define MAX_OUT_VOLTAGE_STATUS 4
 #define MAX_CHARGER_CURRENT_STATUS 2
 #define MAX_LCD_STATUS 6
+
+#define MAX_MENU_INDEX 4
+#define MAX_LCD_STAT_SUBMENU_INDEX 6
+#define MAX_OUTPUT_REG_SUBMENU_INDEX 4
+#define MAX_SEND_SUBMENU_INDEX 8
+#define MAX_TURN_OFF_SUBMENU_INDEX 1
+#define MAX_BACKLIGHT_SUBMENU_INDEX 1
+#define MAX_MENU_LEVEL 2
+#define BACKLIGHT_TIME_OFF 5000
+
 
 //-----------------------------------------------------------------
 //IN
@@ -72,6 +92,8 @@ struct cell cell4;
 //-----------------------------------------------------------------
 //ADC
 //-----------------------------------------------------------------
+
+
 
 
 
@@ -91,8 +113,13 @@ extern SPI_HandleTypeDef SPI_HANDLER;
 #define VOLTAGE_AT_LOW_PERCENT_OF_CAPACITY  3.25//in milliseconds
 #define VOLTAGE_AT_HIGH_PERCENT_OF_CAPACITY 4.2//in milliseconds
 #define CELL_CAPACITY 2400
-#define HIGH_PERCENT_OF_CAPACITY 100
-#define LOW_PERCENT_OF_CAPACITY 15
+#define HIGH_PERCENT_OF_CAPACITY 1
+#define LOW_PERCENT_OF_CAPACITY 0.15
+
+#define termNom 10000 // Referenční odpor termistoru
+#define refTep 25      // Teplota pro referenční odpor
+#define beta 3977      // Beta faktor
+#define rezistor 10000 // hodnota odporu v sérii
 
 
 void initGPIOs();

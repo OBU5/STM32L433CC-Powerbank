@@ -32,5 +32,4 @@ struct ADC {
 void initADC(char name[5], struct ADC* adc, float adjustingConstant, char quantiti);
 void measureADC(struct ADC* adc, uint32_t measuredValue);
 
-
 #endif /* U8G_ADC_H_ */

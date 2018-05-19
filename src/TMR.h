@@ -23,6 +23,6 @@ struct TMR {
 
 void initTimer(struct TMR* tmr, uint32_t tickConstant);
 void stop(struct TMR* tmr);
-void tick(struct TMR* tmr);
+void tick(struct TMR* tmr, uint32_t milliseconds);
 
 #endif /* TMR_H_ */

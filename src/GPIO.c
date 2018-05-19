@@ -10,6 +10,7 @@
 int changeStateOfGPIO(struct GPIO* gpio, GPIO_PinState state) {
 	if (gpio->type == OUT) {
 		HAL_GPIO_WritePin(gpio->bank, gpio->pin, state);
+		return 0;
 	}
 	else
 		return -1;

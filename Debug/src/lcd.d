@@ -34,8 +34,8 @@ src/lcd.o: ../src/lcd.c ../src/config.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_tim_ex.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart.h \
  ../system/include/stm32l4xx/stm32l4xx_hal_uart_ex.h ../src/ADC.h \
- ../src/GPIO.h ../src/TMR.h ../src/cell.h ../src/lcd.h ../src/u8g/u8g.h \
- ../src/u8g/u8g_arm.h ../src/u8g/u8g.h
+ ../src/GPIO.h ../src/TMR.h ../src/cell.h ../src/events.h ../src/lcd.h \
+ ../src/power.h ../src/u8g/u8g.h ../src/u8g/u8g_arm.h ../src/u8g/u8g.h
 
 ../src/config.h:
 
@@ -119,7 +119,11 @@ src/lcd.o: ../src/lcd.c ../src/config.h \
 
 ../src/cell.h:
 
+../src/events.h:
+
 ../src/lcd.h:
+
+../src/power.h:
 
 ../src/u8g/u8g.h:
 

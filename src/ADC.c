@@ -6,6 +6,10 @@
  */
 #include "ADC.h"
 
+void setAdjustingConstant(struct ADC* adc, float cons) {
+	adc->adjustingConst = cons;
+}
+
 void initADC(char name[5], struct ADC* adc, float adjustingConstant,
 		char quantiti) {
 	adc->measuredTimes = 0;
@@ -27,22 +31,23 @@ void measureADC(struct ADC* adc, uint32_t measuredValue) {
 			* adc->adjustingConst;
 	if (adc->state == ENABLE) {
 		adc->measuredTimes++;
-		adc->currValue = (measuredValue / ADC_DISTORTION) * V_REF
+		adc->currValue = ((float) measuredValue / ADC_DISTORTION) * V_REF
 				* adc->adjustingConst;
-		adc->avgValue = (adc->avgValue + adc->currValue) / adc->measuredTimes;
+		adc->avgValue = (adc->avgValue + adc->currValue) / 2;
 		if (adc->maxValue < adc->currValue)
 			adc->maxValue = adc->currValue;
 		if (adc->minValue > adc->currValue)
 			adc->minValue = adc->currValue;
 	} else {
+		adc->measuredTimes = 0;
 		adc->state = ENABLE;
-		adc->measuredTimes++;
-		adc->currValue = (measuredValue / ADC_DISTORTION) * V_REF;
-		adc->minValue = (measuredValue / ADC_DISTORTION) * V_REF
+		adc->currValue = (((float) measuredValue) / ADC_DISTORTION) * V_REF
 				* adc->adjustingConst;
-		adc->maxValue = (measuredValue / ADC_DISTORTION) * V_REF
+		adc->minValue = ((float) measuredValue / ADC_DISTORTION) * V_REF
 				* adc->adjustingConst;
-		adc->avgValue = (measuredValue / ADC_DISTORTION) * V_REF
+		adc->maxValue = ((float) measuredValue / ADC_DISTORTION) * V_REF
+				* adc->adjustingConst;
+		adc->avgValue = ((float) measuredValue / ADC_DISTORTION) * V_REF
 				* adc->adjustingConst;
 	}
 }

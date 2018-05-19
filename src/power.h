@@ -11,7 +11,7 @@
 #include "config.h"
 
 typedef enum {
-	_0V, _5V, _3_3V, _11_5V
+	_0V, _5V, _3_3V,_9V, _11_5V
 } OutVoltageStatus;
 
 
@@ -19,17 +19,23 @@ typedef enum {
 	_0mA, _200mA, _2A
 } ChargerCurrentStatus;
 
-void powerInit();
-void chargerCurrentOFF();
-void increaseChargerCurrent();
-void reduceChargerCurrent();
-void goRoundChargerCurrent();
-void changeChargerCurrent();
 
+void checkCharger();
+void initOutVoltage();
+void chargerCurrentOFF();
+
+void increaseChargerCurrent();
+
+void reduceChargerCurrent();
+
+void goRoundChargerCurrent();
+void setChargerCurrent(ChargerCurrentStatus status);
+void changeChargerCurrent();
 void outVoltageOFF();
-void increaseOutVoltage();
-void reduceOutVoltage();
-void goRoundOutVoltage();
-void changeOutVoltage();
+
+void changeOutVoltage(uint16_t status);
+float getOutputVoltage();
+float getCurrentCharge();
+
 
 #endif /* POWER_H_ */

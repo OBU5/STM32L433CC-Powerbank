@@ -20,22 +20,23 @@ void initGPIOs() {
 	initGPIO(&FET_BuckConv_9V, OUT, GPIOB, GPIO_PIN_4);
 	initGPIO(&FET_BuckConv_12V, OUT, GPIOB, GPIO_PIN_5);
 	initGPIO(&FET_BuckConv_EN, OUT, GPIOA, GPIO_PIN_11);
+	changeStateOfGPIO(&FET_BuckConv_EN,1);
 
 	initGPIO(&FET_Charger_CurrentMode, OUT, GPIOB, GPIO_PIN_7);
 	initGPIO(&CHRG_nSHDN, OUT, GPIOB, GPIO_PIN_9);
 	initGPIO(&CHRG_nICL, IN, GPIOB, GPIO_PIN_8);
 
 	initGPIO(&BTN_1, IN, GPIOA, GPIO_PIN_15);
-	initGPIO(&BTN_2, IN, GPIOA, GPIO_PIN_1);
-	initGPIO(&BTN_3, IN, GPIOA, GPIO_PIN_2);
+	initGPIO(&BTN_2, IN, GPIOB, GPIO_PIN_1);
+	initGPIO(&BTN_3, IN, GPIOB, GPIO_PIN_2);
 }
 
 void initADCs() {
 
 	initADC("1P", &voltageCell1P, ((10 + 9.09) / 9.09), 'V');
-	initADC("2P", &voltageCell2P, ((10 + 3.09) / 3.09), 'V');
-	initADC("3P", &voltageCell3P, ((10 + 1.87) / 1.87), 'V');
-	initADC("4P", &voltageCell4P, ((10 + 1.37) / 1.37), 'V');
+	initADC("2P", &voltageCell2P,((10 + 3.09) / 3.09), 'V');
+	initADC("3P", &voltageCell3P,((10 + 1.87) / 1.87), 'V');
+	initADC("4P", &voltageCell4P,((10 + 1.37) / 1.37), 'V');
 	initADC("Tc", &tempCell, 1, 'C');
 	initADC("Tb", &tempBalancer, 1, 'C');
 	initADC("VA", &voltageAdapter, (16 + 1.3) / 1.3, 'V');
@@ -54,12 +55,12 @@ void initTimers() {
 }
 
 void initCells() {
-	initCell(&cell1, "cell 1", CELL_CAPACITY, voltageCell1P.currValue);
-	initCell(&cell2, "cell 2", CELL_CAPACITY,
+	initCell(&cell1, "C1",(float) CELL_CAPACITY, voltageCell1P.currValue);
+	initCell(&cell2, "C2",(float) CELL_CAPACITY,
 			voltageCell2P.currValue - voltageCell1P.currValue);
-	initCell(&cell3, "cell 3", CELL_CAPACITY,
+	initCell(&cell3, "C3",(float) CELL_CAPACITY,
 			voltageCell3P.currValue - voltageCell2P.currValue);
-	initCell(&cell4, "cell 4", CELL_CAPACITY,
+	initCell(&cell4, "C4",(float) CELL_CAPACITY,
 			voltageCell4P.currValue - voltageCell3P.currValue);
 }
 
