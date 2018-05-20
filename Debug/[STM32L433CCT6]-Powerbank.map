@@ -163,6 +163,7 @@ lcdIndex            0x2               ./src/lcd.o
 chargerCurrentStatus
                     0x1               ./src/power.o
 htim2               0x3c              ./src/main.o
+OnHours             0x4               ./src/u8g/u8g_arm.o
 outputVoltage       0x4               ./src/power.o
 u8g_vs_current      0x1               ./src/u8g/u8g_virtual_screen.o
 cell4               0x28              ./src/u8g/u8g_arm.o
@@ -8725,10 +8726,6 @@ Discarded input sections
                 0x0000000000000000        0x2 ./src/events.o
  .text.checkIfUsed
                 0x0000000000000000        0x2 ./src/events.o
- .text.computeR1ResistanceInSerieToR2
-                0x0000000000000000       0x20 ./src/events.o
- .text.calculateCelsiusBySimplifiedSteinhart
-                0x0000000000000000       0x88 ./src/events.o
  .debug_macro   0x0000000000000000      0xa5a ./src/events.o
  .debug_macro   0x0000000000000000       0x10 ./src/events.o
  .debug_macro   0x0000000000000000       0xc5 ./src/events.o
@@ -9853,7 +9850,7 @@ END GROUP
                 0x000000002000fc00                __Main_Stack_Limit = (__stack - __Main_Stack_Size)
                 [!provide]                        PROVIDE (_Main_Stack_Limit, __Main_Stack_Limit)
                 0x0000000000000100                _Minimum_Stack_Size = 0x100
-                0x0000000020000d48                PROVIDE (_Heap_Begin, _end_noinit)
+                0x0000000020000d4c                PROVIDE (_Heap_Begin, _end_noinit)
                 0x000000002000fc00                PROVIDE (_Heap_Limit, (__stack - __Main_Stack_Size))
 
 .isr_vector     0x0000000008000000      0x3cc
@@ -9877,16 +9874,16 @@ END GROUP
 
 .inits          0x00000000080003cc       0x28
                 0x00000000080003cc                __data_regions_array_start = .
-                0x00000000080003cc        0x4 LONG 0x800f4b8 LOADADDR (.data)
+                0x00000000080003cc        0x4 LONG 0x800f578 LOADADDR (.data)
                 0x00000000080003d0        0x4 LONG 0x20000000 ADDR (.data)
                 0x00000000080003d4        0x4 LONG 0x20000600 (ADDR (.data) + SIZEOF (.data))
-                0x00000000080003d8        0x4 LONG 0x800f4b8 LOADADDR (.data_CCMRAM)
+                0x00000000080003d8        0x4 LONG 0x800f578 LOADADDR (.data_CCMRAM)
                 0x00000000080003dc        0x4 LONG 0x10000000 ADDR (.data_CCMRAM)
                 0x00000000080003e0        0x4 LONG 0x10000000 (ADDR (.data_CCMRAM) + SIZEOF (.data_CCMRAM))
                 0x00000000080003e4                __data_regions_array_end = .
                 0x00000000080003e4                __bss_regions_array_start = .
                 0x00000000080003e4        0x4 LONG 0x20000600 ADDR (.bss)
-                0x00000000080003e8        0x4 LONG 0x20000d48 (ADDR (.bss) + SIZEOF (.bss))
+                0x00000000080003e8        0x4 LONG 0x20000d4c (ADDR (.bss) + SIZEOF (.bss))
                 0x00000000080003ec        0x4 LONG 0x10000000 ADDR (.bss_CCMRAM)
                 0x00000000080003f0        0x4 LONG 0x10000000 (ADDR (.bss_CCMRAM) + SIZEOF (.bss_CCMRAM))
                 0x00000000080003f4                __bss_regions_array_end = .
@@ -9912,7 +9909,7 @@ END GROUP
 .flashtext
  *(.flashtext .flashtext.*)
 
-.text           0x0000000008000400     0xf0b0
+.text           0x0000000008000400     0xf170
  *(.text .text.*)
  .text.HAL_InitTick
                 0x0000000008000400       0x2c ./system/src/stm32l4xx/stm32l4xx_hal.o
@@ -10580,636 +10577,647 @@ END GROUP
  .text.getTemperature
                 0x0000000008005228       0xa8 ./src/events.o
                 0x0000000008005228                getTemperature
- .text.initLCD  0x00000000080052d0       0xd8 ./src/lcd.o
-                0x00000000080052d0                initLCD
+ .text.checkCellVoltage
+                0x00000000080052d0       0x4c ./src/events.o
+                0x00000000080052d0                checkCellVoltage
+ .text.checkCurrent
+                0x000000000800531c       0x1c ./src/events.o
+                0x000000000800531c                checkCurrent
+ .text.checkTemperature
+                0x0000000008005338       0x34 ./src/events.o
+                0x0000000008005338                checkTemperature
+ .text.checkDeviceTurnedOnTime
+                0x000000000800536c       0x18 ./src/events.o
+                0x000000000800536c                checkDeviceTurnedOnTime
+ .text.initLCD  0x0000000008005384       0xd8 ./src/lcd.o
+                0x0000000008005384                initLCD
  .text.writeFloatADC
-                0x00000000080053a8       0x40 ./src/lcd.o
-                0x00000000080053a8                writeFloatADC
+                0x000000000800545c       0x40 ./src/lcd.o
+                0x000000000800545c                writeFloatADC
  .text.writeFloat2ADC
-                0x00000000080053e8       0x40 ./src/lcd.o
-                0x00000000080053e8                writeFloat2ADC
+                0x000000000800549c       0x40 ./src/lcd.o
+                0x000000000800549c                writeFloat2ADC
  .text.writeIntADC
-                0x0000000008005428       0x40 ./src/lcd.o
-                0x0000000008005428                writeIntADC
+                0x00000000080054dc       0x40 ./src/lcd.o
+                0x00000000080054dc                writeIntADC
  .text.writeAllCurrentADCValues
-                0x0000000008005468      0x14c ./src/lcd.o
-                0x0000000008005468                writeAllCurrentADCValues
+                0x000000000800551c      0x14c ./src/lcd.o
+                0x000000000800551c                writeAllCurrentADCValues
  .text.writeAllAverageADCValues
-                0x00000000080055b4      0x14c ./src/lcd.o
-                0x00000000080055b4                writeAllAverageADCValues
+                0x0000000008005668      0x14c ./src/lcd.o
+                0x0000000008005668                writeAllAverageADCValues
  .text.writeAllMaxADCValues
-                0x0000000008005700      0x14c ./src/lcd.o
-                0x0000000008005700                writeAllMaxADCValues
+                0x00000000080057b4      0x14c ./src/lcd.o
+                0x00000000080057b4                writeAllMaxADCValues
  .text.writeAllMinADCValues
-                0x000000000800584c      0x14c ./src/lcd.o
-                0x000000000800584c                writeAllMinADCValues
+                0x0000000008005900      0x14c ./src/lcd.o
+                0x0000000008005900                writeAllMinADCValues
  .text.writeCellsOnLCD
-                0x0000000008005998       0xac ./src/lcd.o
-                0x0000000008005998                writeCellsOnLCD
+                0x0000000008005a4c       0xac ./src/lcd.o
+                0x0000000008005a4c                writeCellsOnLCD
  .text.writeCellsCapacityOnLCD
-                0x0000000008005a44       0xf8 ./src/lcd.o
-                0x0000000008005a44                writeCellsCapacityOnLCD
+                0x0000000008005af8       0xf8 ./src/lcd.o
+                0x0000000008005af8                writeCellsCapacityOnLCD
  .text.printMainScreen
-                0x0000000008005b3c      0x464 ./src/lcd.o
-                0x0000000008005b3c                printMainScreen
+                0x0000000008005bf0      0x464 ./src/lcd.o
+                0x0000000008005bf0                printMainScreen
  .text.printByLcdIndex
-                0x0000000008005fa0       0x44 ./src/lcd.o
-                0x0000000008005fa0                printByLcdIndex
+                0x0000000008006054       0x44 ./src/lcd.o
+                0x0000000008006054                printByLcdIndex
  .text.setLCDindex
-                0x0000000008005fe4        0xc ./src/lcd.o
-                0x0000000008005fe4                setLCDindex
+                0x0000000008006098        0xc ./src/lcd.o
+                0x0000000008006098                setLCDindex
  .text.printMenu
-                0x0000000008005ff0       0xec ./src/lcd.o
-                0x0000000008005ff0                printMenu
+                0x00000000080060a4       0xec ./src/lcd.o
+                0x00000000080060a4                printMenu
  .text.print_OUTPUT_REG_Submenu
-                0x00000000080060dc       0xec ./src/lcd.o
-                0x00000000080060dc                print_OUTPUT_REG_Submenu
+                0x0000000008006190       0xec ./src/lcd.o
+                0x0000000008006190                print_OUTPUT_REG_Submenu
  .text.print_LCD_STAT_Submenu
-                0x00000000080061c8      0x11c ./src/lcd.o
-                0x00000000080061c8                print_LCD_STAT_Submenu
+                0x000000000800627c      0x11c ./src/lcd.o
+                0x000000000800627c                print_LCD_STAT_Submenu
  .text.print_SEND_Submenu
-                0x00000000080062e4      0x11c ./src/lcd.o
-                0x00000000080062e4                print_SEND_Submenu
+                0x0000000008006398      0x11c ./src/lcd.o
+                0x0000000008006398                print_SEND_Submenu
  .text.print_BACKLIGHT_Submenu
-                0x0000000008006400       0x98 ./src/lcd.o
-                0x0000000008006400                print_BACKLIGHT_Submenu
+                0x00000000080064b4       0x98 ./src/lcd.o
+                0x00000000080064b4                print_BACKLIGHT_Submenu
  .text.print_TURN_OFF_Submenu
-                0x0000000008006498       0x98 ./src/lcd.o
-                0x0000000008006498                print_TURN_OFF_Submenu
+                0x000000000800654c       0x98 ./src/lcd.o
+                0x000000000800654c                print_TURN_OFF_Submenu
  .text.writeOnLCDByMenuIndex
-                0x0000000008006530       0x58 ./src/lcd.o
-                0x0000000008006530                writeOnLCDByMenuIndex
+                0x00000000080065e4       0x58 ./src/lcd.o
+                0x00000000080065e4                writeOnLCDByMenuIndex
  .text.goRoundMenuIndex
-                0x0000000008006588       0x1c ./src/lcd.o
-                0x0000000008006588                goRoundMenuIndex
+                0x000000000800663c       0x1c ./src/lcd.o
+                0x000000000800663c                goRoundMenuIndex
  .text.setMenuIndex
-                0x00000000080065a4       0x10 ./src/lcd.o
-                0x00000000080065a4                setMenuIndex
+                0x0000000008006658       0x10 ./src/lcd.o
+                0x0000000008006658                setMenuIndex
  .text.set_MENU_LEVEL
-                0x00000000080065b4       0x10 ./src/lcd.o
-                0x00000000080065b4                set_MENU_LEVEL
+                0x0000000008006668       0x10 ./src/lcd.o
+                0x0000000008006668                set_MENU_LEVEL
  .text.increase_MENU_LEVEL
-                0x00000000080065c4       0x18 ./src/lcd.o
-                0x00000000080065c4                increase_MENU_LEVEL
+                0x0000000008006678       0x18 ./src/lcd.o
+                0x0000000008006678                increase_MENU_LEVEL
  .text.reduce_MENU_LEVEL
-                0x00000000080065dc       0x14 ./src/lcd.o
-                0x00000000080065dc                reduce_MENU_LEVEL
+                0x0000000008006690       0x14 ./src/lcd.o
+                0x0000000008006690                reduce_MENU_LEVEL
  .text.setSubMenuIndex
-                0x00000000080065f0       0x50 ./src/lcd.o
-                0x00000000080065f0                setSubMenuIndex
+                0x00000000080066a4       0x50 ./src/lcd.o
+                0x00000000080066a4                setSubMenuIndex
  .text.goRoundSubMenuIndex
-                0x0000000008006640       0x90 ./src/lcd.o
-                0x0000000008006640                goRoundSubMenuIndex
+                0x00000000080066f4       0x90 ./src/lcd.o
+                0x00000000080066f4                goRoundSubMenuIndex
  .text.getMenuLevel
-                0x00000000080066d0        0xc ./src/lcd.o
-                0x00000000080066d0                getMenuLevel
+                0x0000000008006784        0xc ./src/lcd.o
+                0x0000000008006784                getMenuLevel
  .text.getMenuIndex
-                0x00000000080066dc        0xc ./src/lcd.o
-                0x00000000080066dc                getMenuIndex
+                0x0000000008006790        0xc ./src/lcd.o
+                0x0000000008006790                getMenuIndex
  .text.getSubMenuIndex
-                0x00000000080066e8        0xc ./src/lcd.o
-                0x00000000080066e8                getSubMenuIndex
+                0x000000000800679c        0xc ./src/lcd.o
+                0x000000000800679c                getSubMenuIndex
  .text.backlightCheck
-                0x00000000080066f4       0x70 ./src/lcd.o
-                0x00000000080066f4                backlightCheck
+                0x00000000080067a8       0x70 ./src/lcd.o
+                0x00000000080067a8                backlightCheck
  .text.backlightON
-                0x0000000008006764       0x20 ./src/lcd.o
-                0x0000000008006764                backlightON
+                0x0000000008006818       0x20 ./src/lcd.o
+                0x0000000008006818                backlightON
  .text.backlightOFF
-                0x0000000008006784       0x14 ./src/lcd.o
-                0x0000000008006784                backlightOFF
+                0x0000000008006838       0x14 ./src/lcd.o
+                0x0000000008006838                backlightOFF
  .text.backlightOnForever
-                0x0000000008006798       0x18 ./src/lcd.o
-                0x0000000008006798                backlightOnForever
+                0x000000000800684c       0x18 ./src/lcd.o
+                0x000000000800684c                backlightOnForever
  .text.MX_GPIO_Init
-                0x00000000080067b0      0x110 ./src/main.o
+                0x0000000008006864      0x110 ./src/main.o
  .text.MX_DMA_Init
-                0x00000000080068c0       0x34 ./src/main.o
+                0x0000000008006974       0x34 ./src/main.o
  .text.HAL_ADC_ConvCpltCallback
-                0x00000000080068f4       0x9c ./src/main.o
-                0x00000000080068f4                HAL_ADC_ConvCpltCallback
+                0x00000000080069a8       0x9c ./src/main.o
+                0x00000000080069a8                HAL_ADC_ConvCpltCallback
  .text.EXTI1_IRQHandler
-                0x0000000008006990       0x20 ./src/main.o
-                0x0000000008006990                EXTI1_IRQHandler
+                0x0000000008006a44       0x20 ./src/main.o
+                0x0000000008006a44                EXTI1_IRQHandler
  .text.EXTI2_IRQHandler
-                0x00000000080069b0       0x20 ./src/main.o
-                0x00000000080069b0                EXTI2_IRQHandler
+                0x0000000008006a64       0x20 ./src/main.o
+                0x0000000008006a64                EXTI2_IRQHandler
  .text.EXTI15_10_IRQHandler
-                0x00000000080069d0       0x24 ./src/main.o
-                0x00000000080069d0                EXTI15_10_IRQHandler
+                0x0000000008006a84       0x24 ./src/main.o
+                0x0000000008006a84                EXTI15_10_IRQHandler
  .text.HAL_TIM_PeriodElapsedCallback
-                0x00000000080069f4       0x30 ./src/main.o
-                0x00000000080069f4                HAL_TIM_PeriodElapsedCallback
+                0x0000000008006aa8       0x30 ./src/main.o
+                0x0000000008006aa8                HAL_TIM_PeriodElapsedCallback
  .text._Error_Handler
-                0x0000000008006a24        0x2 ./src/main.o
-                0x0000000008006a24                _Error_Handler
- *fill*         0x0000000008006a26        0x2 
+                0x0000000008006ad8        0x2 ./src/main.o
+                0x0000000008006ad8                _Error_Handler
+ *fill*         0x0000000008006ada        0x2 
  .text.MX_SPI2_Init
-                0x0000000008006a28       0x54 ./src/main.o
+                0x0000000008006adc       0x54 ./src/main.o
  .text.MX_USART3_UART_Init
-                0x0000000008006a7c       0x44 ./src/main.o
+                0x0000000008006b30       0x44 ./src/main.o
  .text.MX_ADC1_Init
-                0x0000000008006ac0      0x1c8 ./src/main.o
+                0x0000000008006b74      0x1c8 ./src/main.o
  .text.MX_TIM1_Init
-                0x0000000008006c88       0x78 ./src/main.o
+                0x0000000008006d3c       0x78 ./src/main.o
  .text.MX_TIM2_Init
-                0x0000000008006d00       0x70 ./src/main.o
+                0x0000000008006db4       0x70 ./src/main.o
  .text.MX_RTC_Init
-                0x0000000008006d70      0x120 ./src/main.o
+                0x0000000008006e24      0x120 ./src/main.o
  .text.SystemClock_Config
-                0x0000000008006e90       0xd8 ./src/main.o
-                0x0000000008006e90                SystemClock_Config
- .text.main     0x0000000008006f68       0xd4 ./src/main.o
-                0x0000000008006f68                main
- *fill*         0x000000000800703c        0x4 
+                0x0000000008006f44       0xd8 ./src/main.o
+                0x0000000008006f44                SystemClock_Config
+ .text.main     0x000000000800701c       0xe4 ./src/main.o
+                0x000000000800701c                main
  .text.changeChargerCurrent
-                0x0000000008007040       0xa0 ./src/power.o
-                0x0000000008007040                changeChargerCurrent
+                0x0000000008007100       0xa0 ./src/power.o
+                0x0000000008007100                changeChargerCurrent
  .text.setChargerCurrent
-                0x00000000080070e0       0x1c ./src/power.o
-                0x00000000080070e0                setChargerCurrent
+                0x00000000080071a0       0x1c ./src/power.o
+                0x00000000080071a0                setChargerCurrent
  .text.checkCharger
-                0x00000000080070fc       0x44 ./src/power.o
-                0x00000000080070fc                checkCharger
+                0x00000000080071bc       0x44 ./src/power.o
+                0x00000000080071bc                checkCharger
  .text.changeOutVoltage
-                0x0000000008007140       0xfc ./src/power.o
-                0x0000000008007140                changeOutVoltage
+                0x0000000008007200       0xfc ./src/power.o
+                0x0000000008007200                changeOutVoltage
  .text.initOutVoltage
-                0x000000000800723c       0x2c ./src/power.o
-                0x000000000800723c                initOutVoltage
+                0x00000000080072fc       0x2c ./src/power.o
+                0x00000000080072fc                initOutVoltage
  .text.getOutputVoltage
-                0x0000000008007268        0xc ./src/power.o
-                0x0000000008007268                getOutputVoltage
+                0x0000000008007328        0xc ./src/power.o
+                0x0000000008007328                getOutputVoltage
  .text.getCurrentCharge
-                0x0000000008007274        0xc ./src/power.o
-                0x0000000008007274                getCurrentCharge
+                0x0000000008007334        0xc ./src/power.o
+                0x0000000008007334                getCurrentCharge
  .text.HAL_MspInit
-                0x0000000008007280       0x90 ./src/stm32l4xx_hal_msp.o
-                0x0000000008007280                HAL_MspInit
+                0x0000000008007340       0x90 ./src/stm32l4xx_hal_msp.o
+                0x0000000008007340                HAL_MspInit
  .text.HAL_ADC_MspInit
-                0x0000000008007310       0xb0 ./src/stm32l4xx_hal_msp.o
-                0x0000000008007310                HAL_ADC_MspInit
+                0x00000000080073d0       0xb0 ./src/stm32l4xx_hal_msp.o
+                0x00000000080073d0                HAL_ADC_MspInit
  .text.HAL_RTC_MspInit
-                0x00000000080073c0       0x44 ./src/stm32l4xx_hal_msp.o
-                0x00000000080073c0                HAL_RTC_MspInit
+                0x0000000008007480       0x44 ./src/stm32l4xx_hal_msp.o
+                0x0000000008007480                HAL_RTC_MspInit
  .text.HAL_SPI_MspInit
-                0x0000000008007404       0x50 ./src/stm32l4xx_hal_msp.o
-                0x0000000008007404                HAL_SPI_MspInit
+                0x00000000080074c4       0x50 ./src/stm32l4xx_hal_msp.o
+                0x00000000080074c4                HAL_SPI_MspInit
  .text.HAL_TIM_Base_MspInit
-                0x0000000008007454       0xc0 ./src/stm32l4xx_hal_msp.o
-                0x0000000008007454                HAL_TIM_Base_MspInit
+                0x0000000008007514       0xc0 ./src/stm32l4xx_hal_msp.o
+                0x0000000008007514                HAL_TIM_Base_MspInit
  .text.HAL_UART_MspInit
-                0x0000000008007514       0x50 ./src/stm32l4xx_hal_msp.o
-                0x0000000008007514                HAL_UART_MspInit
+                0x00000000080075d4       0x50 ./src/stm32l4xx_hal_msp.o
+                0x00000000080075d4                HAL_UART_MspInit
  .text.NMI_Handler
-                0x0000000008007564        0x2 ./src/stm32l4xx_it.o
-                0x0000000008007564                NMI_Handler
+                0x0000000008007624        0x2 ./src/stm32l4xx_it.o
+                0x0000000008007624                NMI_Handler
  .text.HardFault_Handler
-                0x0000000008007566        0x2 ./src/stm32l4xx_it.o
-                0x0000000008007566                HardFault_Handler
+                0x0000000008007626        0x2 ./src/stm32l4xx_it.o
+                0x0000000008007626                HardFault_Handler
  .text.MemManage_Handler
-                0x0000000008007568        0x2 ./src/stm32l4xx_it.o
-                0x0000000008007568                MemManage_Handler
+                0x0000000008007628        0x2 ./src/stm32l4xx_it.o
+                0x0000000008007628                MemManage_Handler
  .text.BusFault_Handler
-                0x000000000800756a        0x2 ./src/stm32l4xx_it.o
-                0x000000000800756a                BusFault_Handler
+                0x000000000800762a        0x2 ./src/stm32l4xx_it.o
+                0x000000000800762a                BusFault_Handler
  .text.UsageFault_Handler
-                0x000000000800756c        0x2 ./src/stm32l4xx_it.o
-                0x000000000800756c                UsageFault_Handler
+                0x000000000800762c        0x2 ./src/stm32l4xx_it.o
+                0x000000000800762c                UsageFault_Handler
  .text.SVC_Handler
-                0x000000000800756e        0x2 ./src/stm32l4xx_it.o
-                0x000000000800756e                SVC_Handler
+                0x000000000800762e        0x2 ./src/stm32l4xx_it.o
+                0x000000000800762e                SVC_Handler
  .text.DebugMon_Handler
-                0x0000000008007570        0x2 ./src/stm32l4xx_it.o
-                0x0000000008007570                DebugMon_Handler
+                0x0000000008007630        0x2 ./src/stm32l4xx_it.o
+                0x0000000008007630                DebugMon_Handler
  .text.PendSV_Handler
-                0x0000000008007572        0x2 ./src/stm32l4xx_it.o
-                0x0000000008007572                PendSV_Handler
+                0x0000000008007632        0x2 ./src/stm32l4xx_it.o
+                0x0000000008007632                PendSV_Handler
  .text.SysTick_Handler
-                0x0000000008007574        0xc ./src/stm32l4xx_it.o
-                0x0000000008007574                SysTick_Handler
+                0x0000000008007634        0xc ./src/stm32l4xx_it.o
+                0x0000000008007634                SysTick_Handler
  .text.TAMP_STAMP_IRQHandler
-                0x0000000008007580       0x10 ./src/stm32l4xx_it.o
-                0x0000000008007580                TAMP_STAMP_IRQHandler
+                0x0000000008007640       0x10 ./src/stm32l4xx_it.o
+                0x0000000008007640                TAMP_STAMP_IRQHandler
  .text.DMA1_Channel1_IRQHandler
-                0x0000000008007590       0x10 ./src/stm32l4xx_it.o
-                0x0000000008007590                DMA1_Channel1_IRQHandler
+                0x0000000008007650       0x10 ./src/stm32l4xx_it.o
+                0x0000000008007650                DMA1_Channel1_IRQHandler
  .text.ADC1_IRQHandler
-                0x00000000080075a0       0x10 ./src/stm32l4xx_it.o
-                0x00000000080075a0                ADC1_IRQHandler
+                0x0000000008007660       0x10 ./src/stm32l4xx_it.o
+                0x0000000008007660                ADC1_IRQHandler
  .text.TIM1_BRK_TIM15_IRQHandler
-                0x00000000080075b0       0x10 ./src/stm32l4xx_it.o
-                0x00000000080075b0                TIM1_BRK_TIM15_IRQHandler
+                0x0000000008007670       0x10 ./src/stm32l4xx_it.o
+                0x0000000008007670                TIM1_BRK_TIM15_IRQHandler
  .text.TIM1_UP_TIM16_IRQHandler
-                0x00000000080075c0       0x18 ./src/stm32l4xx_it.o
-                0x00000000080075c0                TIM1_UP_TIM16_IRQHandler
+                0x0000000008007680       0x18 ./src/stm32l4xx_it.o
+                0x0000000008007680                TIM1_UP_TIM16_IRQHandler
  .text.TIM1_TRG_COM_IRQHandler
-                0x00000000080075d8       0x10 ./src/stm32l4xx_it.o
-                0x00000000080075d8                TIM1_TRG_COM_IRQHandler
+                0x0000000008007698       0x10 ./src/stm32l4xx_it.o
+                0x0000000008007698                TIM1_TRG_COM_IRQHandler
  .text.TIM1_CC_IRQHandler
-                0x00000000080075e8       0x10 ./src/stm32l4xx_it.o
-                0x00000000080075e8                TIM1_CC_IRQHandler
+                0x00000000080076a8       0x10 ./src/stm32l4xx_it.o
+                0x00000000080076a8                TIM1_CC_IRQHandler
  .text.TIM2_IRQHandler
-                0x00000000080075f8       0x10 ./src/stm32l4xx_it.o
-                0x00000000080075f8                TIM2_IRQHandler
+                0x00000000080076b8       0x10 ./src/stm32l4xx_it.o
+                0x00000000080076b8                TIM2_IRQHandler
  .text.RTC_Alarm_IRQHandler
-                0x0000000008007608       0x10 ./src/stm32l4xx_it.o
-                0x0000000008007608                RTC_Alarm_IRQHandler
- .text.log      0x0000000008007618       0xf8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-w_log.o)
-                0x0000000008007618                log
+                0x00000000080076c8       0x10 ./src/stm32l4xx_it.o
+                0x00000000080076c8                RTC_Alarm_IRQHandler
+ .text.log      0x00000000080076d8       0xf8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-w_log.o)
+                0x00000000080076d8                log
  .text.__ieee754_log
-                0x0000000008007710      0x394 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-e_log.o)
-                0x0000000008007710                __ieee754_log
- .text.matherr  0x0000000008007aa4        0x4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-s_matherr.o)
-                0x0000000008007aa4                matherr
- .text.nan      0x0000000008007aa8        0xc /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-s_nan.o)
-                0x0000000008007aa8                nan
- .text          0x0000000008007ab4      0x378 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_addsubdf3.o)
-                0x0000000008007ab4                __aeabi_drsub
-                0x0000000008007abc                __aeabi_dsub
-                0x0000000008007abc                __subdf3
-                0x0000000008007ac0                __adddf3
-                0x0000000008007ac0                __aeabi_dadd
-                0x0000000008007d38                __aeabi_ui2d
-                0x0000000008007d38                __floatunsidf
-                0x0000000008007d58                __floatsidf
-                0x0000000008007d58                __aeabi_i2d
-                0x0000000008007d7c                __extendsfdf2
-                0x0000000008007d7c                __aeabi_f2d
-                0x0000000008007dc0                __aeabi_ul2d
-                0x0000000008007dc0                __floatundidf
-                0x0000000008007dd0                __floatdidf
-                0x0000000008007dd0                __aeabi_l2d
- .text          0x0000000008007e2c      0x424 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_muldivdf3.o)
-                0x0000000008007e2c                __aeabi_dmul
-                0x0000000008007e2c                __muldf3
-                0x0000000008008080                __aeabi_ddiv
-                0x0000000008008080                __divdf3
- .text          0x0000000008008250      0x110 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_cmpdf2.o)
-                0x0000000008008250                __gtdf2
-                0x0000000008008250                __gedf2
-                0x0000000008008258                __ltdf2
-                0x0000000008008258                __ledf2
-                0x0000000008008260                __cmpdf2
-                0x0000000008008260                __eqdf2
-                0x0000000008008260                __nedf2
-                0x00000000080082dc                __aeabi_cdrcmple
-                0x00000000080082ec                __aeabi_cdcmple
-                0x00000000080082ec                __aeabi_cdcmpeq
-                0x00000000080082fc                __aeabi_dcmpeq
-                0x0000000008008310                __aeabi_dcmplt
-                0x0000000008008324                __aeabi_dcmple
-                0x0000000008008338                __aeabi_dcmpge
-                0x000000000800834c                __aeabi_dcmpgt
- .text          0x0000000008008360       0x2c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_unorddf2.o)
-                0x0000000008008360                __aeabi_dcmpun
-                0x0000000008008360                __unorddf2
- .text          0x000000000800838c       0xa0 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_truncdfsf2.o)
-                0x000000000800838c                __aeabi_d2f
-                0x000000000800838c                __truncdfsf2
- .text          0x000000000800842c      0x21c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_addsubsf3.o)
-                0x000000000800842c                __aeabi_frsub
-                0x0000000008008434                __subsf3
-                0x0000000008008434                __aeabi_fsub
-                0x0000000008008438                __aeabi_fadd
-                0x0000000008008438                __addsf3
-                0x0000000008008598                __aeabi_ui2f
-                0x0000000008008598                __floatunsisf
-                0x00000000080085a0                __aeabi_i2f
-                0x00000000080085a0                __floatsisf
-                0x00000000080085bc                __floatundisf
-                0x00000000080085bc                __aeabi_ul2f
-                0x00000000080085cc                __floatdisf
-                0x00000000080085cc                __aeabi_l2f
- .text          0x0000000008008648      0x2a0 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_muldivsf3.o)
-                0x0000000008008648                __mulsf3
-                0x0000000008008648                __aeabi_fmul
-                0x00000000080087b0                __divsf3
-                0x00000000080087b0                __aeabi_fdiv
- .text          0x00000000080088e8       0xec /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_cmpsf2.o)
-                0x00000000080088e8                __gtsf2
-                0x00000000080088e8                __gesf2
-                0x00000000080088f0                __lesf2
-                0x00000000080088f0                __ltsf2
-                0x00000000080088f8                __nesf2
-                0x00000000080088f8                __eqsf2
-                0x00000000080088f8                __cmpsf2
-                0x0000000008008958                __aeabi_cfrcmple
-                0x0000000008008960                __aeabi_cfcmple
-                0x0000000008008960                __aeabi_cfcmpeq
-                0x0000000008008970                __aeabi_fcmpeq
-                0x0000000008008984                __aeabi_fcmplt
-                0x0000000008008998                __aeabi_fcmple
-                0x00000000080089ac                __aeabi_fcmpge
-                0x00000000080089c0                __aeabi_fcmpgt
- .text          0x00000000080089d4       0x4c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_fixsfsi.o)
-                0x00000000080089d4                __fixsfsi
-                0x00000000080089d4                __aeabi_f2iz
- .text          0x0000000008008a20       0x30 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_aeabi_uldivmod.o)
-                0x0000000008008a20                __aeabi_uldivmod
- .text          0x0000000008008a50      0x2cc /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_udivmoddi4.o)
-                0x0000000008008a50                __udivmoddi4
- .text          0x0000000008008d1c        0x4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_dvmd_tls.o)
-                0x0000000008008d1c                __aeabi_ldiv0
-                0x0000000008008d1c                __aeabi_idiv0
- .text.__errno  0x0000000008008d20        0xc /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-errno.o)
-                0x0000000008008d20                __errno
- .text.memcpy   0x0000000008008d2c       0x16 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memcpy-stub.o)
-                0x0000000008008d2c                memcpy
- .text.__cvt    0x0000000008008d42       0xb8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_float.o)
-                0x0000000008008d42                __cvt
+                0x00000000080077d0      0x394 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-e_log.o)
+                0x00000000080077d0                __ieee754_log
+ .text.matherr  0x0000000008007b64        0x4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-s_matherr.o)
+                0x0000000008007b64                matherr
+ .text.nan      0x0000000008007b68        0xc /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-s_nan.o)
+                0x0000000008007b68                nan
+ .text          0x0000000008007b74      0x378 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_addsubdf3.o)
+                0x0000000008007b74                __aeabi_drsub
+                0x0000000008007b7c                __aeabi_dsub
+                0x0000000008007b7c                __subdf3
+                0x0000000008007b80                __adddf3
+                0x0000000008007b80                __aeabi_dadd
+                0x0000000008007df8                __aeabi_ui2d
+                0x0000000008007df8                __floatunsidf
+                0x0000000008007e18                __floatsidf
+                0x0000000008007e18                __aeabi_i2d
+                0x0000000008007e3c                __extendsfdf2
+                0x0000000008007e3c                __aeabi_f2d
+                0x0000000008007e80                __aeabi_ul2d
+                0x0000000008007e80                __floatundidf
+                0x0000000008007e90                __floatdidf
+                0x0000000008007e90                __aeabi_l2d
+ .text          0x0000000008007eec      0x424 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_muldivdf3.o)
+                0x0000000008007eec                __aeabi_dmul
+                0x0000000008007eec                __muldf3
+                0x0000000008008140                __aeabi_ddiv
+                0x0000000008008140                __divdf3
+ .text          0x0000000008008310      0x110 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_cmpdf2.o)
+                0x0000000008008310                __gtdf2
+                0x0000000008008310                __gedf2
+                0x0000000008008318                __ltdf2
+                0x0000000008008318                __ledf2
+                0x0000000008008320                __cmpdf2
+                0x0000000008008320                __eqdf2
+                0x0000000008008320                __nedf2
+                0x000000000800839c                __aeabi_cdrcmple
+                0x00000000080083ac                __aeabi_cdcmple
+                0x00000000080083ac                __aeabi_cdcmpeq
+                0x00000000080083bc                __aeabi_dcmpeq
+                0x00000000080083d0                __aeabi_dcmplt
+                0x00000000080083e4                __aeabi_dcmple
+                0x00000000080083f8                __aeabi_dcmpge
+                0x000000000800840c                __aeabi_dcmpgt
+ .text          0x0000000008008420       0x2c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_unorddf2.o)
+                0x0000000008008420                __aeabi_dcmpun
+                0x0000000008008420                __unorddf2
+ .text          0x000000000800844c       0xa0 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_truncdfsf2.o)
+                0x000000000800844c                __aeabi_d2f
+                0x000000000800844c                __truncdfsf2
+ .text          0x00000000080084ec      0x21c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_addsubsf3.o)
+                0x00000000080084ec                __aeabi_frsub
+                0x00000000080084f4                __subsf3
+                0x00000000080084f4                __aeabi_fsub
+                0x00000000080084f8                __aeabi_fadd
+                0x00000000080084f8                __addsf3
+                0x0000000008008658                __aeabi_ui2f
+                0x0000000008008658                __floatunsisf
+                0x0000000008008660                __aeabi_i2f
+                0x0000000008008660                __floatsisf
+                0x000000000800867c                __floatundisf
+                0x000000000800867c                __aeabi_ul2f
+                0x000000000800868c                __floatdisf
+                0x000000000800868c                __aeabi_l2f
+ .text          0x0000000008008708      0x2a0 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_muldivsf3.o)
+                0x0000000008008708                __mulsf3
+                0x0000000008008708                __aeabi_fmul
+                0x0000000008008870                __divsf3
+                0x0000000008008870                __aeabi_fdiv
+ .text          0x00000000080089a8       0xec /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_cmpsf2.o)
+                0x00000000080089a8                __gtsf2
+                0x00000000080089a8                __gesf2
+                0x00000000080089b0                __lesf2
+                0x00000000080089b0                __ltsf2
+                0x00000000080089b8                __nesf2
+                0x00000000080089b8                __eqsf2
+                0x00000000080089b8                __cmpsf2
+                0x0000000008008a18                __aeabi_cfrcmple
+                0x0000000008008a20                __aeabi_cfcmple
+                0x0000000008008a20                __aeabi_cfcmpeq
+                0x0000000008008a30                __aeabi_fcmpeq
+                0x0000000008008a44                __aeabi_fcmplt
+                0x0000000008008a58                __aeabi_fcmple
+                0x0000000008008a6c                __aeabi_fcmpge
+                0x0000000008008a80                __aeabi_fcmpgt
+ .text          0x0000000008008a94       0x4c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_fixsfsi.o)
+                0x0000000008008a94                __fixsfsi
+                0x0000000008008a94                __aeabi_f2iz
+ .text          0x0000000008008ae0       0x30 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_aeabi_uldivmod.o)
+                0x0000000008008ae0                __aeabi_uldivmod
+ .text          0x0000000008008b10      0x2cc /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_udivmoddi4.o)
+                0x0000000008008b10                __udivmoddi4
+ .text          0x0000000008008ddc        0x4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_dvmd_tls.o)
+                0x0000000008008ddc                __aeabi_ldiv0
+                0x0000000008008ddc                __aeabi_idiv0
+ .text.__errno  0x0000000008008de0        0xc /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-errno.o)
+                0x0000000008008de0                __errno
+ .text.memcpy   0x0000000008008dec       0x16 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memcpy-stub.o)
+                0x0000000008008dec                memcpy
+ .text.__cvt    0x0000000008008e02       0xb8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_float.o)
+                0x0000000008008e02                __cvt
  .text.__exponent
-                0x0000000008008dfa       0x66 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_float.o)
-                0x0000000008008dfa                __exponent
+                0x0000000008008eba       0x66 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_float.o)
+                0x0000000008008eba                __exponent
  .text._printf_float
-                0x0000000008008e60      0x46c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_float.o)
-                0x0000000008008e60                _printf_float
+                0x0000000008008f20      0x46c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_float.o)
+                0x0000000008008f20                _printf_float
  .text._printf_common
-                0x00000000080092cc       0xea /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x00000000080092cc                _printf_common
- *fill*         0x00000000080093b6        0x2 
+                0x000000000800938c       0xea /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x000000000800938c                _printf_common
+ *fill*         0x0000000008009476        0x2 
  .text._printf_i
-                0x00000000080093b8      0x224 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x00000000080093b8                _printf_i
- .text.sprintf  0x00000000080095dc       0x40 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-sprintf.o)
-                0x00000000080095dc                sprintf
-                0x00000000080095dc                siprintf
- .text          0x000000000800961c       0x10 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-strlen.o)
-                0x000000000800961c                strlen
+                0x0000000008009478      0x224 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x0000000008009478                _printf_i
+ .text.sprintf  0x000000000800969c       0x40 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-sprintf.o)
+                0x000000000800969c                sprintf
+                0x000000000800969c                siprintf
+ .text          0x00000000080096dc       0x10 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-strlen.o)
+                0x00000000080096dc                strlen
  .text._vsnprintf_r
-                0x000000000800962c       0x58 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-vsnprintf.o)
-                0x000000000800962c                _vsnprintf_r
-                0x000000000800962c                _vsniprintf_r
+                0x00000000080096ec       0x58 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-vsnprintf.o)
+                0x00000000080096ec                _vsnprintf_r
+                0x00000000080096ec                _vsniprintf_r
  .text.vsnprintf
-                0x0000000008009684       0x1c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-vsnprintf.o)
-                0x0000000008009684                vsnprintf
-                0x0000000008009684                vsniprintf
- .text.quorem   0x00000000080096a0      0x118 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-dtoa.o)
- .text._dtoa_r  0x00000000080097b8      0xb74 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-dtoa.o)
-                0x00000000080097b8                _dtoa_r
+                0x0000000008009744       0x1c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-vsnprintf.o)
+                0x0000000008009744                vsnprintf
+                0x0000000008009744                vsniprintf
+ .text.quorem   0x0000000008009760      0x118 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-dtoa.o)
+ .text._dtoa_r  0x0000000008009878      0xb74 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-dtoa.o)
+                0x0000000008009878                _dtoa_r
  .text._localeconv_r
-                0x000000000800a32c       0x1c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-localeconv.o)
-                0x000000000800a32c                _localeconv_r
- .text.malloc   0x000000000800a348       0x10 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-malloc.o)
-                0x000000000800a348                malloc
- *fill*         0x000000000800a358        0x8 
- .text          0x000000000800a360       0xa0 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memchr.o)
-                0x000000000800a360                memchr
- .text._Balloc  0x000000000800a400       0x68 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a400                _Balloc
- .text._Bfree   0x000000000800a468       0x2e /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a468                _Bfree
+                0x000000000800a3ec       0x1c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-localeconv.o)
+                0x000000000800a3ec                _localeconv_r
+ .text.malloc   0x000000000800a408       0x10 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-malloc.o)
+                0x000000000800a408                malloc
+ *fill*         0x000000000800a418        0x8 
+ .text          0x000000000800a420       0xa0 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memchr.o)
+                0x000000000800a420                memchr
+ .text._Balloc  0x000000000800a4c0       0x68 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a4c0                _Balloc
+ .text._Bfree   0x000000000800a528       0x2e /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a528                _Bfree
  .text.__multadd
-                0x000000000800a496       0x76 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a496                __multadd
+                0x000000000800a556       0x76 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a556                __multadd
  .text.__hi0bits
-                0x000000000800a50c       0x3e /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a50c                __hi0bits
+                0x000000000800a5cc       0x3e /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a5cc                __hi0bits
  .text.__lo0bits
-                0x000000000800a54a       0x5e /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a54a                __lo0bits
- .text.__i2b    0x000000000800a5a8       0x12 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a5a8                __i2b
+                0x000000000800a60a       0x5e /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a60a                __lo0bits
+ .text.__i2b    0x000000000800a668       0x12 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a668                __i2b
  .text.__multiply
-                0x000000000800a5ba      0x12c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a5ba                __multiply
- *fill*         0x000000000800a6e6        0x2 
+                0x000000000800a67a      0x12c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a67a                __multiply
+ *fill*         0x000000000800a7a6        0x2 
  .text.__pow5mult
-                0x000000000800a6e8       0x9c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a6e8                __pow5mult
+                0x000000000800a7a8       0x9c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a7a8                __pow5mult
  .text.__lshift
-                0x000000000800a784       0xa8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a784                __lshift
- .text.__mcmp   0x000000000800a82c       0x34 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a82c                __mcmp
- .text.__mdiff  0x000000000800a860       0xba /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a860                __mdiff
- .text.__d2b    0x000000000800a91a       0x9e /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800a91a                __d2b
+                0x000000000800a844       0xa8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a844                __lshift
+ .text.__mcmp   0x000000000800a8ec       0x34 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a8ec                __mcmp
+ .text.__mdiff  0x000000000800a920       0xba /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a920                __mdiff
+ .text.__d2b    0x000000000800a9da       0x9e /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800a9da                __d2b
  .text._calloc_r
-                0x000000000800a9b8       0x1c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-callocr.o)
-                0x000000000800a9b8                _calloc_r
- .text._free_r  0x000000000800a9d4       0x9c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-freer.o)
-                0x000000000800a9d4                _free_r
+                0x000000000800aa78       0x1c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-callocr.o)
+                0x000000000800aa78                _calloc_r
+ .text._free_r  0x000000000800aa94       0x9c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-freer.o)
+                0x000000000800aa94                _free_r
  .text._malloc_r
-                0x000000000800aa70       0xb4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-mallocr.o)
-                0x000000000800aa70                _malloc_r
+                0x000000000800ab30       0xb4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-mallocr.o)
+                0x000000000800ab30                _malloc_r
  .text.__ssputs_r
-                0x000000000800ab24       0xb4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-svfprintf.o)
-                0x000000000800ab24                __ssputs_r
+                0x000000000800abe4       0xb4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-svfprintf.o)
+                0x000000000800abe4                __ssputs_r
  .text._svfprintf_r
-                0x000000000800abd8      0x1ec /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-svfprintf.o)
-                0x000000000800abd8                _svfprintf_r
-                0x000000000800abd8                _svfiprintf_r
- .text._sbrk_r  0x000000000800adc4       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-sbrkr.o)
-                0x000000000800adc4                _sbrk_r
+                0x000000000800ac98      0x1ec /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-svfprintf.o)
+                0x000000000800ac98                _svfprintf_r
+                0x000000000800ac98                _svfiprintf_r
+ .text._sbrk_r  0x000000000800ae84       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-sbrkr.o)
+                0x000000000800ae84                _sbrk_r
  .text.__ascii_mbtowc
-                0x000000000800ade4       0x24 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mbtowc_r.o)
-                0x000000000800ade4                __ascii_mbtowc
- .text.memmove  0x000000000800ae08       0x32 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memmove.o)
-                0x000000000800ae08                memmove
- .text.memset   0x000000000800ae3a       0x10 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memset.o)
-                0x000000000800ae3a                memset
+                0x000000000800aea4       0x24 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mbtowc_r.o)
+                0x000000000800aea4                __ascii_mbtowc
+ .text.memmove  0x000000000800aec8       0x32 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memmove.o)
+                0x000000000800aec8                memmove
+ .text.memset   0x000000000800aefa       0x10 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memset.o)
+                0x000000000800aefa                memset
  .text.__malloc_lock
-                0x000000000800ae4a        0x2 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mlock.o)
-                0x000000000800ae4a                __malloc_lock
+                0x000000000800af0a        0x2 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mlock.o)
+                0x000000000800af0a                __malloc_lock
  .text.__malloc_unlock
-                0x000000000800ae4c        0x2 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mlock.o)
-                0x000000000800ae4c                __malloc_unlock
+                0x000000000800af0c        0x2 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mlock.o)
+                0x000000000800af0c                __malloc_unlock
  .text._realloc_r
-                0x000000000800ae4e       0x4c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-reallocr.o)
-                0x000000000800ae4e                _realloc_r
+                0x000000000800af0e       0x4c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-reallocr.o)
+                0x000000000800af0e                _realloc_r
  .text.__ascii_wctomb
-                0x000000000800ae9a       0x1a /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-wctomb_r.o)
-                0x000000000800ae9a                __ascii_wctomb
+                0x000000000800af5a       0x1a /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-wctomb_r.o)
+                0x000000000800af5a                __ascii_wctomb
  .text._malloc_usable_size_r
-                0x000000000800aeb4       0x10 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-msizer.o)
-                0x000000000800aeb4                _malloc_usable_size_r
- .text          0x000000000800aec4       0x50 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_fixdfsi.o)
-                0x000000000800aec4                __fixdfsi
-                0x000000000800aec4                __aeabi_d2iz
+                0x000000000800af74       0x10 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-msizer.o)
+                0x000000000800af74                _malloc_usable_size_r
+ .text          0x000000000800af84       0x50 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_fixdfsi.o)
+                0x000000000800af84                __fixdfsi
+                0x000000000800af84                __aeabi_d2iz
  *(.rodata .rodata.* .constdata .constdata.*)
  .rodata.dumpExceptionStack.str1.4
-                0x000000000800af14      0x11a ./system/src/cortexm/exception_handlers.o
- *fill*         0x000000000800b02e        0x2 
+                0x000000000800afd4      0x11a ./system/src/cortexm/exception_handlers.o
+ *fill*         0x000000000800b0ee        0x2 
  .rodata.str1.4
-                0x000000000800b030       0x2a ./system/src/cortexm/exception_handlers.o
- *fill*         0x000000000800b05a        0x2 
+                0x000000000800b0f0       0x2a ./system/src/cortexm/exception_handlers.o
+ *fill*         0x000000000800b11a        0x2 
  .rodata.AHBPrescTable
-                0x000000000800b05c       0x10 ./system/src/cmsis/system_stm32l4xx.o
-                0x000000000800b05c                AHBPrescTable
+                0x000000000800b11c       0x10 ./system/src/cmsis/system_stm32l4xx.o
+                0x000000000800b11c                AHBPrescTable
  .rodata.APBPrescTable
-                0x000000000800b06c        0x8 ./system/src/cmsis/system_stm32l4xx.o
-                0x000000000800b06c                APBPrescTable
+                0x000000000800b12c        0x8 ./system/src/cmsis/system_stm32l4xx.o
+                0x000000000800b12c                APBPrescTable
  .rodata.MSIRangeTable
-                0x000000000800b074       0x30 ./system/src/cmsis/system_stm32l4xx.o
-                0x000000000800b074                MSIRangeTable
+                0x000000000800b134       0x30 ./system/src/cmsis/system_stm32l4xx.o
+                0x000000000800b134                MSIRangeTable
  .rodata.u8g_dev_dogs102_data_start
-                0x000000000800b0a4        0x8 ./src/u8g/u8g_dev_uc1701_dogs102.o
+                0x000000000800b164        0x8 ./src/u8g/u8g_dev_uc1701_dogs102.o
  .rodata.u8g_dev_dogs102_init_seq
-                0x000000000800b0ac       0x22 ./src/u8g/u8g_dev_uc1701_dogs102.o
- *fill*         0x000000000800b0ce        0x2 
+                0x000000000800b16c       0x22 ./src/u8g/u8g_dev_uc1701_dogs102.o
+ *fill*         0x000000000800b18e        0x2 
  .rodata.u8g_font_10x20
-                0x000000000800b0d0      0xd7d ./src/u8g/u8g_font_data.o
-                0x000000000800b0d0                u8g_font_10x20
- *fill*         0x000000000800be4d        0x3 
+                0x000000000800b190      0xd7d ./src/u8g/u8g_font_data.o
+                0x000000000800b190                u8g_font_10x20
+ *fill*         0x000000000800bf0d        0x3 
  .rodata.u8g_font_5x8
-                0x000000000800be50      0x69d ./src/u8g/u8g_font_data.o
-                0x000000000800be50                u8g_font_5x8
- *fill*         0x000000000800c4ed        0x3 
+                0x000000000800bf10      0x69d ./src/u8g/u8g_font_data.o
+                0x000000000800bf10                u8g_font_5x8
+ *fill*         0x000000000800c5ad        0x3 
  .rodata.u8g_font_6x10
-                0x000000000800c4f0      0x74a ./src/u8g/u8g_font_data.o
-                0x000000000800c4f0                u8g_font_6x10
- *fill*         0x000000000800cc3a        0x2 
+                0x000000000800c5b0      0x74a ./src/u8g/u8g_font_data.o
+                0x000000000800c5b0                u8g_font_6x10
+ *fill*         0x000000000800ccfa        0x2 
  .rodata.u8g_font_6x10r
-                0x000000000800cc3c      0x379 ./src/u8g/u8g_font_data.o
-                0x000000000800cc3c                u8g_font_6x10r
- *fill*         0x000000000800cfb5        0x3 
+                0x000000000800ccfc      0x379 ./src/u8g/u8g_font_data.o
+                0x000000000800ccfc                u8g_font_6x10r
+ *fill*         0x000000000800d075        0x3 
  .rodata.u8g_font_6x12
-                0x000000000800cfb8      0x78d ./src/u8g/u8g_font_data.o
-                0x000000000800cfb8                u8g_font_6x12
- *fill*         0x000000000800d745        0x3 
+                0x000000000800d078      0x78d ./src/u8g/u8g_font_data.o
+                0x000000000800d078                u8g_font_6x12
+ *fill*         0x000000000800d805        0x3 
  .rodata.u8g_font_6x12r
-                0x000000000800d748      0x382 ./src/u8g/u8g_font_data.o
-                0x000000000800d748                u8g_font_6x12r
- *fill*         0x000000000800daca        0x2 
+                0x000000000800d808      0x382 ./src/u8g/u8g_font_data.o
+                0x000000000800d808                u8g_font_6x12r
+ *fill*         0x000000000800db8a        0x2 
  .rodata.u8g_font_6x13
-                0x000000000800dacc      0x870 ./src/u8g/u8g_font_data.o
-                0x000000000800dacc                u8g_font_6x13
+                0x000000000800db8c      0x870 ./src/u8g/u8g_font_data.o
+                0x000000000800db8c                u8g_font_6x13
  .rodata.u8g_font_6x13r
-                0x000000000800e33c      0x411 ./src/u8g/u8g_font_data.o
-                0x000000000800e33c                u8g_font_6x13r
- *fill*         0x000000000800e74d        0x3 
+                0x000000000800e3fc      0x411 ./src/u8g/u8g_font_data.o
+                0x000000000800e3fc                u8g_font_6x13r
+ *fill*         0x000000000800e80d        0x3 
  .rodata.u8g_font_7x13
-                0x000000000800e750      0x86d ./src/u8g/u8g_font_data.o
-                0x000000000800e750                u8g_font_7x13
- *fill*         0x000000000800efbd        0x3 
+                0x000000000800e810      0x86d ./src/u8g/u8g_font_data.o
+                0x000000000800e810                u8g_font_7x13
+ *fill*         0x000000000800f07d        0x3 
  .rodata.initADCs.str1.4
-                0x000000000800efc0       0x2b ./src/config.o
- *fill*         0x000000000800efeb        0x1 
+                0x000000000800f080       0x2b ./src/config.o
+ *fill*         0x000000000800f0ab        0x1 
  .rodata.initCells.str1.4
-                0x000000000800efec        0xf ./src/config.o
- *fill*         0x000000000800effb        0x1 
+                0x000000000800f0ac        0xf ./src/config.o
+ *fill*         0x000000000800f0bb        0x1 
  .rodata.printMainScreen.str1.4
-                0x000000000800effc       0x4c ./src/lcd.o
+                0x000000000800f0bc       0x4c ./src/lcd.o
                                          0x54 (size before relaxing)
  .rodata.printMenu.str1.4
-                0x000000000800f048       0x41 ./src/lcd.o
- *fill*         0x000000000800f089        0x3 
+                0x000000000800f108       0x41 ./src/lcd.o
+ *fill*         0x000000000800f149        0x3 
  .rodata.print_BACKLIGHT_Submenu.str1.4
-                0x000000000800f08c       0x11 ./src/lcd.o
- *fill*         0x000000000800f09d        0x3 
+                0x000000000800f14c       0x11 ./src/lcd.o
+ *fill*         0x000000000800f15d        0x3 
  .rodata.print_LCD_STAT_Submenu.str1.4
-                0x000000000800f0a0       0x69 ./src/lcd.o
+                0x000000000800f160       0x69 ./src/lcd.o
                                          0x6d (size before relaxing)
- *fill*         0x000000000800f109        0x3 
+ *fill*         0x000000000800f1c9        0x3 
  .rodata.print_OUTPUT_REG_Submenu.str1.4
-                0x000000000800f10c       0x48 ./src/lcd.o
+                0x000000000800f1cc       0x48 ./src/lcd.o
  .rodata.print_SEND_Submenu.str1.4
-                0x000000000800f154       0x3f ./src/lcd.o
- *fill*         0x000000000800f193        0x1 
+                0x000000000800f214       0x3f ./src/lcd.o
+ *fill*         0x000000000800f253        0x1 
  .rodata.print_TURN_OFF_Submenu.str1.4
-                0x000000000800f194       0x17 ./src/lcd.o
- *fill*         0x000000000800f1ab        0x1 
+                0x000000000800f254       0x17 ./src/lcd.o
+ *fill*         0x000000000800f26b        0x1 
  .rodata.writeAllAverageADCValues.str1.4
-                0x000000000800f1ac        0x4 ./src/lcd.o
+                0x000000000800f26c        0x4 ./src/lcd.o
  .rodata.writeAllCurrentADCValues.str1.4
-                0x000000000800f1b0       0x10 ./src/lcd.o
+                0x000000000800f270       0x10 ./src/lcd.o
  .rodata.writeAllMaxADCValues.str1.4
-                0x000000000800f1c0        0x4 ./src/lcd.o
+                0x000000000800f280        0x4 ./src/lcd.o
  .rodata.writeAllMinADCValues.str1.4
-                0x000000000800f1c4        0x4 ./src/lcd.o
+                0x000000000800f284        0x4 ./src/lcd.o
  .rodata.writeCellsCapacityOnLCD.str1.4
-                0x000000000800f1c8       0x23 ./src/lcd.o
+                0x000000000800f288       0x23 ./src/lcd.o
  .rodata.writeCellsOnLCD.str1.4
-                0x000000000800f1eb        0xf ./src/lcd.o
- *fill*         0x000000000800f1eb        0x1 
+                0x000000000800f2ab        0xf ./src/lcd.o
+ *fill*         0x000000000800f2ab        0x1 
  .rodata.writeFloat2ADC.str1.4
-                0x000000000800f1ec        0xb ./src/lcd.o
- *fill*         0x000000000800f1f7        0x1 
+                0x000000000800f2ac        0xb ./src/lcd.o
+ *fill*         0x000000000800f2b7        0x1 
  .rodata.writeFloatADC.str1.4
-                0x000000000800f1f8        0xb ./src/lcd.o
- *fill*         0x000000000800f203        0x1 
+                0x000000000800f2b8        0xb ./src/lcd.o
+ *fill*         0x000000000800f2c3        0x1 
  .rodata.writeFloatCellVoltage.str1.4
-                0x000000000800f204        0xe ./src/lcd.o
- *fill*         0x000000000800f212        0x2 
+                0x000000000800f2c4        0xe ./src/lcd.o
+ *fill*         0x000000000800f2d2        0x2 
  .rodata.writeIntADC.str1.4
-                0x000000000800f214        0x9 ./src/lcd.o
- *fill*         0x000000000800f21d        0x3 
+                0x000000000800f2d4        0x9 ./src/lcd.o
+ *fill*         0x000000000800f2dd        0x3 
  .rodata.MX_SPI2_Init.str1.4
-                0x000000000800f220        0xe ./src/main.o
- *fill*         0x000000000800f22e        0x2 
+                0x000000000800f2e0        0xe ./src/main.o
+ *fill*         0x000000000800f2ee        0x2 
  .rodata.HAL_ADC_MspInit.str1.4
-                0x000000000800f230       0x1b ./src/stm32l4xx_hal_msp.o
- *fill*         0x000000000800f24b        0x1 
+                0x000000000800f2f0       0x1b ./src/stm32l4xx_hal_msp.o
+ *fill*         0x000000000800f30b        0x1 
  .rodata.log.str1.4
-                0x000000000800f24c        0x4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-w_log.o)
+                0x000000000800f30c        0x4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-w_log.o)
                                           0x5 (size before relaxing)
  .rodata._printf_float.str1.1
-                0x000000000800f250       0x12 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_float.o)
+                0x000000000800f310       0x12 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_float.o)
  .rodata._printf_i.str1.1
-                0x000000000800f262       0x22 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x000000000800f322       0x22 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_i.o)
  .rodata._dtoa_r.str1.1
-                0x000000000800f284        0xd /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-dtoa.o)
+                0x000000000800f344        0xd /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-dtoa.o)
                                           0xf (size before relaxing)
- *fill*         0x000000000800f291        0x7 
+ *fill*         0x000000000800f351        0x7 
  .rodata.__mprec_bigtens
-                0x000000000800f298       0x28 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800f298                __mprec_bigtens
+                0x000000000800f358       0x28 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800f358                __mprec_bigtens
  .rodata.__mprec_tens
-                0x000000000800f2c0       0xc8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
-                0x000000000800f2c0                __mprec_tens
+                0x000000000800f380       0xc8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800f380                __mprec_tens
  .rodata.p05.6084
-                0x000000000800f388        0xc /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+                0x000000000800f448        0xc /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
  .rodata._svfprintf_r.str1.1
-                0x000000000800f394       0x11 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-svfprintf.o)
+                0x000000000800f454       0x11 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-svfprintf.o)
  .rodata._setlocale_r.str1.1
-                0x000000000800f3a5        0x8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-locale.o)
+                0x000000000800f465        0x8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-locale.o)
                                           0x9 (size before relaxing)
  .rodata.str1.1
-                0x000000000800f3ad        0x2 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-locale.o)
+                0x000000000800f46d        0x2 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-locale.o)
  .rodata._ctype_
-                0x000000000800f3af      0x101 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-ctype_.o)
-                0x000000000800f3af                _ctype_
+                0x000000000800f46f      0x101 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-ctype_.o)
+                0x000000000800f46f                _ctype_
  *(vtable)
  *(.eh_frame*)
  *(.glue_7)
- .glue_7        0x000000000800f4b0        0x0 linker stubs
+ .glue_7        0x000000000800f570        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x000000000800f4b0        0x0 linker stubs
+ .glue_7t       0x000000000800f570        0x0 linker stubs
 
-.vfp11_veneer   0x000000000800f4b0        0x0
- .vfp11_veneer  0x000000000800f4b0        0x0 linker stubs
+.vfp11_veneer   0x000000000800f570        0x0
+ .vfp11_veneer  0x000000000800f570        0x0 linker stubs
 
-.v4_bx          0x000000000800f4b0        0x0
- .v4_bx         0x000000000800f4b0        0x0 linker stubs
+.v4_bx          0x000000000800f570        0x0
+ .v4_bx         0x000000000800f570        0x0 linker stubs
 
-.iplt           0x000000000800f4b0        0x0
- .iplt          0x000000000800f4b0        0x0 ./system/src/stm32l4xx/stm32l4xx_hal.o
+.iplt           0x000000000800f570        0x0
+ .iplt          0x000000000800f570        0x0 ./system/src/stm32l4xx/stm32l4xx_hal.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x000000000800f4b0                . = ALIGN (0x4)
-                0x000000000800f4b0                __exidx_start = .
+                0x000000000800f570                . = ALIGN (0x4)
+                0x000000000800f570                __exidx_start = .
 
-.ARM.exidx      0x000000000800f4b0        0x8
+.ARM.exidx      0x000000000800f570        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x000000000800f4b0        0x8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_udivmoddi4.o)
-                0x000000000800f4b8                __exidx_end = .
+ .ARM.exidx     0x000000000800f570        0x8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_udivmoddi4.o)
+                0x000000000800f578                __exidx_end = .
 
-.rel.dyn        0x000000000800f4b8        0x0
- .rel.iplt      0x000000000800f4b8        0x0 ./system/src/stm32l4xx/stm32l4xx_hal.o
-                0x000000000800f4b8                . = ALIGN (0x4)
-                0x000000000800f4b8                _etext = .
-                0x000000000800f4b8                __etext = .
+.rel.dyn        0x000000000800f578        0x0
+ .rel.iplt      0x000000000800f578        0x0 ./system/src/stm32l4xx/stm32l4xx_hal.o
+                0x000000000800f578                . = ALIGN (0x4)
+                0x000000000800f578                _etext = .
+                0x000000000800f578                __etext = .
 
-.data_CCMRAM    0x0000000010000000        0x0 load address 0x000000000800f4b8
+.data_CCMRAM    0x0000000010000000        0x0 load address 0x000000000800f578
  FILL mask 0xff
  *(.data.CCMRAM .data.CCMRAM.*)
                 0x0000000010000000                . = ALIGN (0x4)
-                0x000000000800f4b8                _sidata = LOADADDR (.data)
+                0x000000000800f578                _sidata = LOADADDR (.data)
 
-.data           0x0000000020000000      0x600 load address 0x000000000800f4b8
+.data           0x0000000020000000      0x600 load address 0x000000000800f578
  FILL mask 0xff
                 0x0000000020000000                _sdata = .
                 0x0000000020000000                __data_start__ = .
@@ -11247,13 +11255,13 @@ END GROUP
                 0x0000000020000600                _edata = .
                 0x0000000020000600                __data_end__ = .
 
-.igot.plt       0x0000000020000600        0x0 load address 0x000000000800fab8
+.igot.plt       0x0000000020000600        0x0 load address 0x000000000800fb78
  .igot.plt      0x0000000020000600        0x0 ./system/src/stm32l4xx/stm32l4xx_hal.o
 
 .bss_CCMRAM     0x0000000010000000        0x0
  *(.bss.CCMRAM .bss.CCMRAM.*)
 
-.bss            0x0000000020000600      0x748
+.bss            0x0000000020000600      0x74c
                 0x0000000020000600                __bss_start__ = .
                 0x0000000020000600                _sbss = .
  *(.bss_begin .bss_begin.*)
@@ -11280,7 +11288,7 @@ END GROUP
                 0x00000000200006fc                uwTick
  COMMON         0x0000000020000700        0x4 ./system/src/newlib/_syscalls.o
                 0x0000000020000700                errno
- COMMON         0x0000000020000704      0x340 ./src/u8g/u8g_arm.o
+ COMMON         0x0000000020000704      0x344 ./src/u8g/u8g_arm.o
                 0x0000000020000704                BTN_1
                 0x0000000020000710                integralTimer
                 0x000000002000071c                currentDischarge
@@ -11310,61 +11318,62 @@ END GROUP
                 0x0000000020000964                FET_BuckConv_EN
                 0x0000000020000970                voltageCell3P
                 0x0000000020000994                cell3
-                0x00000000200009bc                cell4
-                0x00000000200009e4                FET_HoldOn
-                0x00000000200009f0                btn1Timer
-                0x00000000200009fc                BTN_3
-                0x0000000020000a08                currentCharge
-                0x0000000020000a2c                LCD_CS
-                0x0000000020000a38                LCD_CD
- COMMON         0x0000000020000a44       0x66 ./src/lcd.o
-                0x0000000020000a44                tmp
-                0x0000000020000a48                lcd
-                0x0000000020000a94                backlightTime
-                0x0000000020000a96                subMenuIndex
-                0x0000000020000a97                menuIndex
-                0x0000000020000a98                backlightStatus
-                0x0000000020000a9c                tmpForSprintf
-                0x0000000020000aa6                menuLevel
-                0x0000000020000aa8                lcdIndex
- *fill*         0x0000000020000aaa        0x2 
- COMMON         0x0000000020000aac      0x28c ./src/main.o
-                0x0000000020000aac                hspi2
-                0x0000000020000b10                huart3
-                0x0000000020000b80                hadc1
-                0x0000000020000be8                hdma_adc1
-                0x0000000020000c30                hrtc
-                0x0000000020000c54                htim1
-                0x0000000020000c90                collectorADC
-                0x0000000020000cc0                htim2
-                0x0000000020000cfc                htim16
- COMMON         0x0000000020000d38        0xc ./src/power.o
-                0x0000000020000d38                curretnCharge
-                0x0000000020000d3c                outVoltageStatus
-                0x0000000020000d3d                chargerCurrentStatus
-                0x0000000020000d40                outputVoltage
+                0x00000000200009bc                OnHours
+                0x00000000200009c0                cell4
+                0x00000000200009e8                FET_HoldOn
+                0x00000000200009f4                btn1Timer
+                0x0000000020000a00                BTN_3
+                0x0000000020000a0c                currentCharge
+                0x0000000020000a30                LCD_CS
+                0x0000000020000a3c                LCD_CD
+ COMMON         0x0000000020000a48       0x66 ./src/lcd.o
+                0x0000000020000a48                tmp
+                0x0000000020000a4c                lcd
+                0x0000000020000a98                backlightTime
+                0x0000000020000a9a                subMenuIndex
+                0x0000000020000a9b                menuIndex
+                0x0000000020000a9c                backlightStatus
+                0x0000000020000aa0                tmpForSprintf
+                0x0000000020000aaa                menuLevel
+                0x0000000020000aac                lcdIndex
+ *fill*         0x0000000020000aae        0x2 
+ COMMON         0x0000000020000ab0      0x28c ./src/main.o
+                0x0000000020000ab0                hspi2
+                0x0000000020000b14                huart3
+                0x0000000020000b84                hadc1
+                0x0000000020000bec                hdma_adc1
+                0x0000000020000c34                hrtc
+                0x0000000020000c58                htim1
+                0x0000000020000c94                collectorADC
+                0x0000000020000cc4                htim2
+                0x0000000020000d00                htim16
+ COMMON         0x0000000020000d3c        0xc ./src/power.o
+                0x0000000020000d3c                curretnCharge
+                0x0000000020000d40                outVoltageStatus
+                0x0000000020000d41                chargerCurrentStatus
+                0x0000000020000d44                outputVoltage
  *(.bss_end .bss_end.*)
- .bss_end       0x0000000020000d44        0x4 ./system/src/newlib/_startup.o
-                0x0000000020000d48                . = ALIGN (0x4)
-                0x0000000020000d48                __bss_end__ = .
-                0x0000000020000d48                _ebss = .
+ .bss_end       0x0000000020000d48        0x4 ./system/src/newlib/_startup.o
+                0x0000000020000d4c                . = ALIGN (0x4)
+                0x0000000020000d4c                __bss_end__ = .
+                0x0000000020000d4c                _ebss = .
 
 .noinit_CCMRAM
  *(.noinit.CCMRAM .noinit.CCMRAM.*)
 
-.noinit         0x0000000020000d48        0x0
-                0x0000000020000d48                _noinit = .
+.noinit         0x0000000020000d4c        0x0
+                0x0000000020000d4c                _noinit = .
  *(.noinit .noinit.*)
-                0x0000000020000d48                . = ALIGN (0x4)
-                0x0000000020000d48                _end_noinit = .
+                0x0000000020000d4c                . = ALIGN (0x4)
+                0x0000000020000d4c                _end_noinit = .
                 [!provide]                        PROVIDE (end, _end_noinit)
                 [!provide]                        PROVIDE (_end, _end_noinit)
                 [!provide]                        PROVIDE (__end, _end_noinit)
                 [!provide]                        PROVIDE (__end__, _end_noinit)
 
-._check_stack   0x0000000020000d48      0x100
-                0x0000000020000e48                . = (. + _Minimum_Stack_Size)
- *fill*         0x0000000020000d48      0x100 
+._check_stack   0x0000000020000d4c      0x100
+                0x0000000020000e4c                . = (. + _Minimum_Stack_Size)
+ *fill*         0x0000000020000d4c      0x100 
 
 .b1text
  *(.b1text)
@@ -11667,7 +11676,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000     0x1f98
+.debug_aranges  0x0000000000000000     0x1fa8
  *(.debug_aranges)
  .debug_aranges
                 0x0000000000000000      0x118 ./system/src/stm32l4xx/stm32l4xx_hal.o
@@ -11758,22 +11767,22 @@ END GROUP
  .debug_aranges
                 0x0000000000001b20       0x38 ./src/config.o
  .debug_aranges
-                0x0000000000001b58       0xb8 ./src/events.o
+                0x0000000000001b58       0xc8 ./src/events.o
  .debug_aranges
-                0x0000000000001c10      0x158 ./src/lcd.o
+                0x0000000000001c20      0x158 ./src/lcd.o
  .debug_aranges
-                0x0000000000001d68       0x98 ./src/main.o
+                0x0000000000001d78       0x98 ./src/main.o
  .debug_aranges
-                0x0000000000001e00       0x78 ./src/power.o
+                0x0000000000001e10       0x78 ./src/power.o
  .debug_aranges
-                0x0000000000001e78       0x78 ./src/stm32l4xx_hal_msp.o
+                0x0000000000001e88       0x78 ./src/stm32l4xx_hal_msp.o
  .debug_aranges
-                0x0000000000001ef0       0xa8 ./src/stm32l4xx_it.o
+                0x0000000000001f00       0xa8 ./src/stm32l4xx_it.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000    0x5911f
+.debug_info     0x0000000000000000    0x591e5
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000     0x10d8 ./system/src/stm32l4xx/stm32l4xx_hal.o
  .debug_info    0x00000000000010d8     0x1ffc ./system/src/stm32l4xx/stm32l4xx_hal_adc.o
@@ -11800,33 +11809,33 @@ END GROUP
  .debug_info    0x000000000001c5ea     0x115a ./system/src/cortexm/exception_handlers.o
  .debug_info    0x000000000001d744       0x22 ./system/src/cmsis/startup_stm32l433xx.o
  .debug_info    0x000000000001d766      0x5a6 ./system/src/cmsis/system_stm32l4xx.o
- .debug_info    0x000000000001dd0c     0x3443 ./src/u8g/u8g_arm.o
- .debug_info    0x000000000002114f     0x252e ./src/u8g/u8g_bitmap.o
- .debug_info    0x000000000002367d     0x209c ./src/u8g/u8g_clip.o
- .debug_info    0x0000000000025719     0x245b ./src/u8g/u8g_com_api.o
- .debug_info    0x0000000000027b74     0x1fdd ./src/u8g/u8g_com_null.o
- .debug_info    0x0000000000029b51     0x25fd ./src/u8g/u8g_dev_uc1701_dogs102.o
- .debug_info    0x000000000002c14e     0x4447 ./src/u8g/u8g_font.o
- .debug_info    0x0000000000030595     0x3649 ./src/u8g/u8g_font_data.o
- .debug_info    0x0000000000033bde     0x20b1 ./src/u8g/u8g_line.o
- .debug_info    0x0000000000035c8f     0x3238 ./src/u8g/u8g_ll_api.o
- .debug_info    0x0000000000038ec7     0x2096 ./src/u8g/u8g_page.o
- .debug_info    0x000000000003af5d     0x2313 ./src/u8g/u8g_pb.o
- .debug_info    0x000000000003d270     0x2b85 ./src/u8g/u8g_pb8v1.o
- .debug_info    0x000000000003fdf5     0x2016 ./src/u8g/u8g_state.o
- .debug_info    0x0000000000041e0b     0x141b ./src/ADC.o
- .debug_info    0x0000000000043226     0x144f ./src/GPIO.o
- .debug_info    0x0000000000044675     0x13ea ./src/TMR.o
- .debug_info    0x0000000000045a5f     0x1660 ./src/cell.o
- .debug_info    0x00000000000470bf     0x1934 ./src/config.o
- .debug_info    0x00000000000489f3     0x1c7a ./src/events.o
- .debug_info    0x000000000004a66d     0x5547 ./src/lcd.o
- .debug_info    0x000000000004fbb4     0x3d92 ./src/main.o
- .debug_info    0x0000000000053946     0x18e8 ./src/power.o
- .debug_info    0x000000000005522e     0x273f ./src/stm32l4xx_hal_msp.o
- .debug_info    0x000000000005796d     0x17b2 ./src/stm32l4xx_it.o
+ .debug_info    0x000000000001dd0c     0x3454 ./src/u8g/u8g_arm.o
+ .debug_info    0x0000000000021160     0x252e ./src/u8g/u8g_bitmap.o
+ .debug_info    0x000000000002368e     0x209c ./src/u8g/u8g_clip.o
+ .debug_info    0x000000000002572a     0x245b ./src/u8g/u8g_com_api.o
+ .debug_info    0x0000000000027b85     0x1fdd ./src/u8g/u8g_com_null.o
+ .debug_info    0x0000000000029b62     0x25fd ./src/u8g/u8g_dev_uc1701_dogs102.o
+ .debug_info    0x000000000002c15f     0x4447 ./src/u8g/u8g_font.o
+ .debug_info    0x00000000000305a6     0x3649 ./src/u8g/u8g_font_data.o
+ .debug_info    0x0000000000033bef     0x20b1 ./src/u8g/u8g_line.o
+ .debug_info    0x0000000000035ca0     0x3238 ./src/u8g/u8g_ll_api.o
+ .debug_info    0x0000000000038ed8     0x2096 ./src/u8g/u8g_page.o
+ .debug_info    0x000000000003af6e     0x2313 ./src/u8g/u8g_pb.o
+ .debug_info    0x000000000003d281     0x2b85 ./src/u8g/u8g_pb8v1.o
+ .debug_info    0x000000000003fe06     0x2016 ./src/u8g/u8g_state.o
+ .debug_info    0x0000000000041e1c     0x142c ./src/ADC.o
+ .debug_info    0x0000000000043248     0x1460 ./src/GPIO.o
+ .debug_info    0x00000000000446a8     0x13fb ./src/TMR.o
+ .debug_info    0x0000000000045aa3     0x1671 ./src/cell.o
+ .debug_info    0x0000000000047114     0x1945 ./src/config.o
+ .debug_info    0x0000000000048a59     0x1c10 ./src/events.o
+ .debug_info    0x000000000004a669     0x5558 ./src/lcd.o
+ .debug_info    0x000000000004fbc1     0x3e3a ./src/main.o
+ .debug_info    0x00000000000539fb     0x18f9 ./src/power.o
+ .debug_info    0x00000000000552f4     0x273f ./src/stm32l4xx_hal_msp.o
+ .debug_info    0x0000000000057a33     0x17b2 ./src/stm32l4xx_it.o
 
-.debug_abbrev   0x0000000000000000     0x7623
+.debug_abbrev   0x0000000000000000     0x75ff
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000      0x2e5 ./system/src/stm32l4xx/stm32l4xx_hal.o
  .debug_abbrev  0x00000000000002e5      0x2f2 ./system/src/stm32l4xx/stm32l4xx_hal_adc.o
@@ -11872,14 +11881,14 @@ END GROUP
  .debug_abbrev  0x0000000000005cd2      0x24a ./src/TMR.o
  .debug_abbrev  0x0000000000005f1c      0x2c2 ./src/cell.o
  .debug_abbrev  0x00000000000061de      0x268 ./src/config.o
- .debug_abbrev  0x0000000000006446      0x341 ./src/events.o
- .debug_abbrev  0x0000000000006787      0x3bc ./src/lcd.o
- .debug_abbrev  0x0000000000006b43      0x32a ./src/main.o
- .debug_abbrev  0x0000000000006e6d      0x2d3 ./src/power.o
- .debug_abbrev  0x0000000000007140      0x2a8 ./src/stm32l4xx_hal_msp.o
- .debug_abbrev  0x00000000000073e8      0x23b ./src/stm32l4xx_it.o
+ .debug_abbrev  0x0000000000006446      0x32c ./src/events.o
+ .debug_abbrev  0x0000000000006772      0x3bc ./src/lcd.o
+ .debug_abbrev  0x0000000000006b2e      0x31b ./src/main.o
+ .debug_abbrev  0x0000000000006e49      0x2d3 ./src/power.o
+ .debug_abbrev  0x000000000000711c      0x2a8 ./src/stm32l4xx_hal_msp.o
+ .debug_abbrev  0x00000000000073c4      0x23b ./src/stm32l4xx_it.o
 
-.debug_line     0x0000000000000000    0x15ca3
+.debug_line     0x0000000000000000    0x15ce8
  *(.debug_line)
  .debug_line    0x0000000000000000      0x905 ./system/src/stm32l4xx/stm32l4xx_hal.o
  .debug_line    0x0000000000000905      0xed5 ./system/src/stm32l4xx/stm32l4xx_hal_adc.o
@@ -11925,14 +11934,14 @@ END GROUP
  .debug_line    0x0000000000010f96      0x718 ./src/TMR.o
  .debug_line    0x00000000000116ae      0x7ac ./src/cell.o
  .debug_line    0x0000000000011e5a      0x741 ./src/config.o
- .debug_line    0x000000000001259b      0x90b ./src/events.o
- .debug_line    0x0000000000012ea6      0xcb5 ./src/lcd.o
- .debug_line    0x0000000000013b5b      0x959 ./src/main.o
- .debug_line    0x00000000000144b4      0x7eb ./src/power.o
- .debug_line    0x0000000000014c9f      0x81d ./src/stm32l4xx_hal_msp.o
- .debug_line    0x00000000000154bc      0x7e7 ./src/stm32l4xx_it.o
+ .debug_line    0x000000000001259b      0x93c ./src/events.o
+ .debug_line    0x0000000000012ed7      0xcb5 ./src/lcd.o
+ .debug_line    0x0000000000013b8c      0x96d ./src/main.o
+ .debug_line    0x00000000000144f9      0x7eb ./src/power.o
+ .debug_line    0x0000000000014ce4      0x81d ./src/stm32l4xx_hal_msp.o
+ .debug_line    0x0000000000015501      0x7e7 ./src/stm32l4xx_it.o
 
-.debug_frame    0x0000000000000000     0x6090
+.debug_frame    0x0000000000000000     0x60b8
  *(.debug_frame)
  .debug_frame   0x0000000000000000      0x23c ./system/src/stm32l4xx/stm32l4xx_hal.o
  .debug_frame   0x000000000000023c      0x2f4 ./system/src/stm32l4xx/stm32l4xx_hal_adc.o
@@ -11976,53 +11985,53 @@ END GROUP
  .debug_frame   0x00000000000045f4       0x50 ./src/TMR.o
  .debug_frame   0x0000000000004644      0x154 ./src/cell.o
  .debug_frame   0x0000000000004798       0x78 ./src/config.o
- .debug_frame   0x0000000000004810      0x1e4 ./src/events.o
- .debug_frame   0x00000000000049f4      0x410 ./src/lcd.o
- .debug_frame   0x0000000000004e04      0x1c0 ./src/main.o
- .debug_frame   0x0000000000004fc4      0x110 ./src/power.o
- .debug_frame   0x00000000000050d4      0x158 ./src/stm32l4xx_hal_msp.o
- .debug_frame   0x000000000000522c      0x180 ./src/stm32l4xx_it.o
- .debug_frame   0x00000000000053ac       0x40 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-w_log.o)
- .debug_frame   0x00000000000053ec       0x4c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-e_log.o)
- .debug_frame   0x0000000000005438       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-s_matherr.o)
- .debug_frame   0x0000000000005458       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-s_nan.o)
- .debug_frame   0x0000000000005478       0xac /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_addsubdf3.o)
- .debug_frame   0x0000000000005524       0x50 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_muldivdf3.o)
- .debug_frame   0x0000000000005574       0xc4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_cmpdf2.o)
- .debug_frame   0x0000000000005638       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_unorddf2.o)
- .debug_frame   0x0000000000005658       0x24 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_truncdfsf2.o)
- .debug_frame   0x000000000000567c       0x4c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_addsubsf3.o)
- .debug_frame   0x00000000000056c8       0x38 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_muldivsf3.o)
- .debug_frame   0x0000000000005700       0xc8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_cmpsf2.o)
- .debug_frame   0x00000000000057c8       0x24 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_fixsfsi.o)
- .debug_frame   0x00000000000057ec       0x2c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_aeabi_uldivmod.o)
- .debug_frame   0x0000000000005818       0x34 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_udivmoddi4.o)
- .debug_frame   0x000000000000584c       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-errno.o)
- .debug_frame   0x000000000000586c       0x28 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memcpy-stub.o)
- .debug_frame   0x0000000000005894       0x90 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_float.o)
- .debug_frame   0x0000000000005924       0x60 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_i.o)
- .debug_frame   0x0000000000005984       0x6c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-sprintf.o)
- .debug_frame   0x00000000000059f0       0x4c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-vsnprintf.o)
- .debug_frame   0x0000000000005a3c       0x6c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-dtoa.o)
- .debug_frame   0x0000000000005aa8       0x40 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-localeconv.o)
- .debug_frame   0x0000000000005ae8       0x30 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-malloc.o)
- .debug_frame   0x0000000000005b18      0x248 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
- .debug_frame   0x0000000000005d60       0x2c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-callocr.o)
- .debug_frame   0x0000000000005d8c       0x38 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-freer.o)
- .debug_frame   0x0000000000005dc4       0x2c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-mallocr.o)
- .debug_frame   0x0000000000005df0       0x90 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-svfprintf.o)
- .debug_frame   0x0000000000005e80       0x2c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-sbrkr.o)
- .debug_frame   0x0000000000005eac       0x68 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-locale.o)
- .debug_frame   0x0000000000005f14       0x48 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mbtowc_r.o)
- .debug_frame   0x0000000000005f5c       0x28 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memmove.o)
- .debug_frame   0x0000000000005f84       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memset.o)
- .debug_frame   0x0000000000005fa4       0x30 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mlock.o)
- .debug_frame   0x0000000000005fd4       0x3c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-reallocr.o)
- .debug_frame   0x0000000000006010       0x3c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-wctomb_r.o)
- .debug_frame   0x000000000000604c       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-msizer.o)
- .debug_frame   0x000000000000606c       0x24 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_fixdfsi.o)
+ .debug_frame   0x0000000000004810      0x20c ./src/events.o
+ .debug_frame   0x0000000000004a1c      0x410 ./src/lcd.o
+ .debug_frame   0x0000000000004e2c      0x1c0 ./src/main.o
+ .debug_frame   0x0000000000004fec      0x110 ./src/power.o
+ .debug_frame   0x00000000000050fc      0x158 ./src/stm32l4xx_hal_msp.o
+ .debug_frame   0x0000000000005254      0x180 ./src/stm32l4xx_it.o
+ .debug_frame   0x00000000000053d4       0x40 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-w_log.o)
+ .debug_frame   0x0000000000005414       0x4c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-e_log.o)
+ .debug_frame   0x0000000000005460       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-s_matherr.o)
+ .debug_frame   0x0000000000005480       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libm.a(lib_a-s_nan.o)
+ .debug_frame   0x00000000000054a0       0xac /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_addsubdf3.o)
+ .debug_frame   0x000000000000554c       0x50 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_muldivdf3.o)
+ .debug_frame   0x000000000000559c       0xc4 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_cmpdf2.o)
+ .debug_frame   0x0000000000005660       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_unorddf2.o)
+ .debug_frame   0x0000000000005680       0x24 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_truncdfsf2.o)
+ .debug_frame   0x00000000000056a4       0x4c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_addsubsf3.o)
+ .debug_frame   0x00000000000056f0       0x38 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_muldivsf3.o)
+ .debug_frame   0x0000000000005728       0xc8 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_cmpsf2.o)
+ .debug_frame   0x00000000000057f0       0x24 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_fixsfsi.o)
+ .debug_frame   0x0000000000005814       0x2c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_aeabi_uldivmod.o)
+ .debug_frame   0x0000000000005840       0x34 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_udivmoddi4.o)
+ .debug_frame   0x0000000000005874       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-errno.o)
+ .debug_frame   0x0000000000005894       0x28 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x00000000000058bc       0x90 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_float.o)
+ .debug_frame   0x000000000000594c       0x60 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .debug_frame   0x00000000000059ac       0x6c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-sprintf.o)
+ .debug_frame   0x0000000000005a18       0x4c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-vsnprintf.o)
+ .debug_frame   0x0000000000005a64       0x6c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-dtoa.o)
+ .debug_frame   0x0000000000005ad0       0x40 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-localeconv.o)
+ .debug_frame   0x0000000000005b10       0x30 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-malloc.o)
+ .debug_frame   0x0000000000005b40      0x248 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mprec.o)
+ .debug_frame   0x0000000000005d88       0x2c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-callocr.o)
+ .debug_frame   0x0000000000005db4       0x38 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-freer.o)
+ .debug_frame   0x0000000000005dec       0x2c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-mallocr.o)
+ .debug_frame   0x0000000000005e18       0x90 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-svfprintf.o)
+ .debug_frame   0x0000000000005ea8       0x2c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-sbrkr.o)
+ .debug_frame   0x0000000000005ed4       0x68 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-locale.o)
+ .debug_frame   0x0000000000005f3c       0x48 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mbtowc_r.o)
+ .debug_frame   0x0000000000005f84       0x28 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memmove.o)
+ .debug_frame   0x0000000000005fac       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-memset.o)
+ .debug_frame   0x0000000000005fcc       0x30 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-mlock.o)
+ .debug_frame   0x0000000000005ffc       0x3c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-reallocr.o)
+ .debug_frame   0x0000000000006038       0x3c /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-wctomb_r.o)
+ .debug_frame   0x0000000000006074       0x20 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/libg_nano.a(lib_a-nano-msizer.o)
+ .debug_frame   0x0000000000006094       0x24 /home/obu/opt/gcc-arm-none-eabi-7-2017-q4-major/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/libgcc.a(_arm_fixdfsi.o)
 
-.debug_str      0x0000000000000000    0xea9b3
+.debug_str      0x0000000000000000    0xea960
  *(.debug_str)
  .debug_str     0x0000000000000000    0xda92d ./system/src/stm32l4xx/stm32l4xx_hal.o
                                       0xdadae (size before relaxing)
@@ -12042,90 +12051,90 @@ END GROUP
                                       0xdad47 (size before relaxing)
  .debug_str     0x00000000000dceb7      0x702 ./system/src/stm32l4xx/stm32l4xx_hal_rcc_ex.o
                                       0xdb00c (size before relaxing)
- .debug_str     0x00000000000dd5b9      0x4ee ./system/src/stm32l4xx/stm32l4xx_hal_rtc.o
+ .debug_str     0x00000000000dd5b9      0x4e8 ./system/src/stm32l4xx/stm32l4xx_hal_rtc.o
                                       0xdab74 (size before relaxing)
- .debug_str     0x00000000000ddaa7      0x784 ./system/src/stm32l4xx/stm32l4xx_hal_rtc_ex.o
+ .debug_str     0x00000000000ddaa1      0x784 ./system/src/stm32l4xx/stm32l4xx_hal_rtc_ex.o
                                       0xdb10d (size before relaxing)
- .debug_str     0x00000000000de22b      0x71d ./system/src/stm32l4xx/stm32l4xx_hal_spi.o
+ .debug_str     0x00000000000de225      0x71d ./system/src/stm32l4xx/stm32l4xx_hal_spi.o
                                       0xdaf3c (size before relaxing)
- .debug_str     0x00000000000de948      0xeb8 ./system/src/stm32l4xx/stm32l4xx_hal_tim.o
+ .debug_str     0x00000000000de942      0xeb8 ./system/src/stm32l4xx/stm32l4xx_hal_tim.o
                                       0xdb753 (size before relaxing)
- .debug_str     0x00000000000df800      0x649 ./system/src/stm32l4xx/stm32l4xx_hal_tim_ex.o
+ .debug_str     0x00000000000df7fa      0x649 ./system/src/stm32l4xx/stm32l4xx_hal_tim_ex.o
                                       0xdb185 (size before relaxing)
- .debug_str     0x00000000000dfe49      0x99a ./system/src/stm32l4xx/stm32l4xx_hal_uart.o
+ .debug_str     0x00000000000dfe43      0x99a ./system/src/stm32l4xx/stm32l4xx_hal_uart.o
                                       0xdb3d6 (size before relaxing)
- .debug_str     0x00000000000e07e3     0x10fa ./system/src/newlib/_exit.o
+ .debug_str     0x00000000000e07dd     0x10fa ./system/src/newlib/_exit.o
                                        0x7eb9 (size before relaxing)
- .debug_str     0x00000000000e18dd      0x4f5 ./system/src/newlib/_sbrk.o
+ .debug_str     0x00000000000e18d7      0x4f5 ./system/src/newlib/_sbrk.o
                                        0x726b (size before relaxing)
- .debug_str     0x00000000000e1dd2      0x260 ./system/src/newlib/_startup.o
+ .debug_str     0x00000000000e1dcc      0x260 ./system/src/newlib/_startup.o
                                        0x69a6 (size before relaxing)
- .debug_str     0x00000000000e2032      0xe8b ./system/src/newlib/_syscalls.o
+ .debug_str     0x00000000000e202c      0xe8b ./system/src/newlib/_syscalls.o
                                        0x8146 (size before relaxing)
- .debug_str     0x00000000000e2ebd      0x17c ./system/src/diag/Trace.o
+ .debug_str     0x00000000000e2eb7      0x17c ./system/src/diag/Trace.o
                                        0x8631 (size before relaxing)
- .debug_str     0x00000000000e3039      0x61d ./system/src/diag/trace_impl.o
+ .debug_str     0x00000000000e3033      0x61d ./system/src/diag/trace_impl.o
                                        0xc3ce (size before relaxing)
- .debug_str     0x00000000000e3656       0x5e ./system/src/cortexm/_initialize_hardware.o
+ .debug_str     0x00000000000e3650       0x5e ./system/src/cortexm/_initialize_hardware.o
                                        0x81bf (size before relaxing)
- .debug_str     0x00000000000e36b4      0x19d ./system/src/cortexm/exception_handlers.o
+ .debug_str     0x00000000000e36ae      0x19d ./system/src/cortexm/exception_handlers.o
                                        0xd5f3 (size before relaxing)
- .debug_str     0x00000000000e3851       0x39 ./system/src/cmsis/startup_stm32l433xx.o
+ .debug_str     0x00000000000e384b       0x39 ./system/src/cmsis/startup_stm32l433xx.o
                                          0x7b (size before relaxing)
- .debug_str     0x00000000000e388a       0x97 ./system/src/cmsis/system_stm32l4xx.o
+ .debug_str     0x00000000000e3884       0x97 ./system/src/cmsis/system_stm32l4xx.o
                                       0x81c35 (size before relaxing)
- .debug_str     0x00000000000e3921     0x4bd7 ./src/u8g/u8g_arm.o
-                                      0xdf614 (size before relaxing)
- .debug_str     0x00000000000e84f8       0xc6 ./src/u8g/u8g_bitmap.o
+ .debug_str     0x00000000000e391b     0x4bdf ./src/u8g/u8g_arm.o
+                                      0xdf61c (size before relaxing)
+ .debug_str     0x00000000000e84fa       0xc6 ./src/u8g/u8g_bitmap.o
                                        0x815e (size before relaxing)
- .debug_str     0x00000000000e85be      0x119 ./src/u8g/u8g_clip.o
+ .debug_str     0x00000000000e85c0      0x119 ./src/u8g/u8g_clip.o
                                        0x81c7 (size before relaxing)
- .debug_str     0x00000000000e86d7       0xd8 ./src/u8g/u8g_com_api.o
+ .debug_str     0x00000000000e86d9       0xd8 ./src/u8g/u8g_com_api.o
                                        0x8188 (size before relaxing)
- .debug_str     0x00000000000e87af       0x1a ./src/u8g/u8g_com_null.o
+ .debug_str     0x00000000000e87b1       0x1a ./src/u8g/u8g_com_null.o
                                        0x80d2 (size before relaxing)
- .debug_str     0x00000000000e87c9      0x1ea ./src/u8g/u8g_dev_uc1701_dogs102.o
+ .debug_str     0x00000000000e87cb      0x1ea ./src/u8g/u8g_dev_uc1701_dogs102.o
                                        0x82f9 (size before relaxing)
- .debug_str     0x00000000000e89b3      0x75a ./src/u8g/u8g_font.o
+ .debug_str     0x00000000000e89b5      0x75a ./src/u8g/u8g_font.o
                                        0x885c (size before relaxing)
- .debug_str     0x00000000000e910d       0x57 ./src/u8g/u8g_font_data.o
+ .debug_str     0x00000000000e910f       0x57 ./src/u8g/u8g_font_data.o
                                        0x80ef (size before relaxing)
- .debug_str     0x00000000000e9164       0x30 ./src/u8g/u8g_line.o
+ .debug_str     0x00000000000e9166       0x30 ./src/u8g/u8g_line.o
                                        0x80e0 (size before relaxing)
- .debug_str     0x00000000000e9194      0x2dc ./src/u8g/u8g_ll_api.o
+ .debug_str     0x00000000000e9196      0x2dc ./src/u8g/u8g_ll_api.o
                                        0x83da (size before relaxing)
- .debug_str     0x00000000000e9470       0x41 ./src/u8g/u8g_page.o
+ .debug_str     0x00000000000e9472       0x41 ./src/u8g/u8g_page.o
                                        0x811e (size before relaxing)
- .debug_str     0x00000000000e94b1       0xa9 ./src/u8g/u8g_pb.o
+ .debug_str     0x00000000000e94b3       0xa9 ./src/u8g/u8g_pb.o
                                        0x81d0 (size before relaxing)
- .debug_str     0x00000000000e955a       0x88 ./src/u8g/u8g_pb8v1.o
+ .debug_str     0x00000000000e955c       0x88 ./src/u8g/u8g_pb8v1.o
                                        0xb21e (size before relaxing)
- .debug_str     0x00000000000e95e2       0x4a ./src/u8g/u8g_state.o
+ .debug_str     0x00000000000e95e4       0x4a ./src/u8g/u8g_state.o
                                        0x80f1 (size before relaxing)
- .debug_str     0x00000000000e962c       0x5a ./src/ADC.o
-                                      0xdb004 (size before relaxing)
- .debug_str     0x00000000000e9686       0x2c ./src/GPIO.o
-                                      0xdb026 (size before relaxing)
- .debug_str     0x00000000000e96b2       0x21 ./src/TMR.o
-                                      0xdafc2 (size before relaxing)
- .debug_str     0x00000000000e96d3      0x124 ./src/cell.o
-                                      0xdb0cc (size before relaxing)
- .debug_str     0x00000000000e97f7       0x4a ./src/config.o
-                                      0xdb01b (size before relaxing)
- .debug_str     0x00000000000e9841      0xb64 ./src/events.o
-                                      0xdbbd9 (size before relaxing)
- .debug_str     0x00000000000ea3a5      0x2e8 ./src/lcd.o
-                                      0xdfa4c (size before relaxing)
- .debug_str     0x00000000000ea68d      0x131 ./src/main.o
-                                      0xdc901 (size before relaxing)
- .debug_str     0x00000000000ea7be      0x10c ./src/power.o
-                                      0xdb142 (size before relaxing)
- .debug_str     0x00000000000ea8ca       0x39 ./src/stm32l4xx_hal_msp.o
+ .debug_str     0x00000000000e962e       0x5a ./src/ADC.o
+                                      0xdb00c (size before relaxing)
+ .debug_str     0x00000000000e9688       0x2c ./src/GPIO.o
+                                      0xdb02e (size before relaxing)
+ .debug_str     0x00000000000e96b4       0x21 ./src/TMR.o
+                                      0xdafca (size before relaxing)
+ .debug_str     0x00000000000e96d5      0x124 ./src/cell.o
+                                      0xdb0d4 (size before relaxing)
+ .debug_str     0x00000000000e97f9       0x4a ./src/config.o
+                                      0xdb023 (size before relaxing)
+ .debug_str     0x00000000000e9843      0xb0f ./src/events.o
+                                      0xdbb8c (size before relaxing)
+ .debug_str     0x00000000000ea352      0x2e8 ./src/lcd.o
+                                      0xdfa54 (size before relaxing)
+ .debug_str     0x00000000000ea63a      0x131 ./src/main.o
+                                      0xdc950 (size before relaxing)
+ .debug_str     0x00000000000ea76b      0x10c ./src/power.o
+                                      0xdb14a (size before relaxing)
+ .debug_str     0x00000000000ea877       0x39 ./src/stm32l4xx_hal_msp.o
                                       0xdb975 (size before relaxing)
- .debug_str     0x00000000000ea903       0xb0 ./src/stm32l4xx_it.o
+ .debug_str     0x00000000000ea8b0       0xb0 ./src/stm32l4xx_it.o
                                       0xdb03b (size before relaxing)
 
-.debug_loc      0x0000000000000000    0x15ba3
+.debug_loc      0x0000000000000000    0x15a0d
  *(.debug_loc)
  .debug_loc     0x0000000000000000       0xf8 ./system/src/stm32l4xx/stm32l4xx_hal.o
  .debug_loc     0x00000000000000f8     0x10b3 ./system/src/stm32l4xx/stm32l4xx_hal_adc.o
@@ -12166,11 +12175,11 @@ END GROUP
  .debug_loc     0x0000000000015016       0x66 ./src/GPIO.o
  .debug_loc     0x000000000001507c       0x3a ./src/TMR.o
  .debug_loc     0x00000000000150b6      0x2b7 ./src/cell.o
- .debug_loc     0x000000000001536d      0x24d ./src/events.o
- .debug_loc     0x00000000000155ba      0x273 ./src/lcd.o
- .debug_loc     0x000000000001582d       0x74 ./src/main.o
- .debug_loc     0x00000000000158a1       0xb1 ./src/power.o
- .debug_loc     0x0000000000015952      0x251 ./src/stm32l4xx_hal_msp.o
+ .debug_loc     0x000000000001536d       0xb7 ./src/events.o
+ .debug_loc     0x0000000000015424      0x273 ./src/lcd.o
+ .debug_loc     0x0000000000015697       0x74 ./src/main.o
+ .debug_loc     0x000000000001570b       0xb1 ./src/power.o
+ .debug_loc     0x00000000000157bc      0x251 ./src/stm32l4xx_hal_msp.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -12188,7 +12197,7 @@ END GROUP
  *(.debug_varnames)
 OUTPUT([STM32L433CCT6]-Powerbank.elf elf32-littlearm)
 
-.debug_ranges   0x0000000000000000     0x1e40
+.debug_ranges   0x0000000000000000     0x1e50
  .debug_ranges  0x0000000000000000      0x108 ./system/src/stm32l4xx/stm32l4xx_hal.o
  .debug_ranges  0x0000000000000108       0xe8 ./system/src/stm32l4xx/stm32l4xx_hal_adc.o
  .debug_ranges  0x00000000000001f0       0xb8 ./system/src/stm32l4xx/stm32l4xx_hal_adc_ex.o
@@ -12232,12 +12241,12 @@ OUTPUT([STM32L433CCT6]-Powerbank.elf elf32-littlearm)
  .debug_ranges  0x00000000000019a0       0x28 ./src/TMR.o
  .debug_ranges  0x00000000000019c8       0x58 ./src/cell.o
  .debug_ranges  0x0000000000001a20       0x28 ./src/config.o
- .debug_ranges  0x0000000000001a48       0xa8 ./src/events.o
- .debug_ranges  0x0000000000001af0      0x160 ./src/lcd.o
- .debug_ranges  0x0000000000001c50       0x88 ./src/main.o
- .debug_ranges  0x0000000000001cd8       0x68 ./src/power.o
- .debug_ranges  0x0000000000001d40       0x68 ./src/stm32l4xx_hal_msp.o
- .debug_ranges  0x0000000000001da8       0x98 ./src/stm32l4xx_it.o
+ .debug_ranges  0x0000000000001a48       0xb8 ./src/events.o
+ .debug_ranges  0x0000000000001b00      0x160 ./src/lcd.o
+ .debug_ranges  0x0000000000001c60       0x88 ./src/main.o
+ .debug_ranges  0x0000000000001ce8       0x68 ./src/power.o
+ .debug_ranges  0x0000000000001d50       0x68 ./src/stm32l4xx_hal_msp.o
+ .debug_ranges  0x0000000000001db8       0x98 ./src/stm32l4xx_it.o
 
 .debug_macro    0x0000000000000000    0x2a7f3
  .debug_macro   0x0000000000000000      0x3a1 ./system/src/stm32l4xx/stm32l4xx_hal.o

@@ -51,6 +51,7 @@ volatile struct ADC currentDischarge;
 volatile struct ADC tempMCU;
 volatile struct ADC voltageBat;
 volatile struct ADC Vrefint;
+int OnHours;
 
 
 struct TMR btn1Timer;

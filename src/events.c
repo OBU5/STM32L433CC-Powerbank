@@ -247,38 +247,44 @@ void exit() {
 	turnOffPowerbank();
 }
 
-float computeR1ResistanceInSerieToR2(float r1DigitalValue, float r2) {
-    return r2 * ((float) 4095 / r1DigitalValue) - r2;
-}
-
-float calculateCelsiusBySimplifiedSteinhart(float t0Celsius, float r0Nominal, float bCoefficient,
-                                            float r2, float r1DigitalValue) {
-    float r1 = computeR1ResistanceInSerieToR2(r1DigitalValue, r2);
-    float t0Kelvins = t0Celsius + 273.15;
-    float reversTKelvins = (1.0f / t0Kelvins) + (1.0f / bCoefficient)
-                            * (float) log(r1 / r0Nominal);
-    float tKelvins = 1.0f / reversTKelvins;
-    float tCelsius = tKelvins - 273.15;
-    return tCelsius;
-}
-
 float getTemperature(float ADC) {
-	float napeti;
+	float tmpVal;
 	//změření napětí na termistoru
-	napeti = ADC/3.3*4096;
+	tmpVal = ADC / 3.3 * 4096;
 
 	// Konverze změřené hodnoty na odpor termistoru
-	napeti = 4095 / napeti - 1;
-	napeti = 10000 / napeti;
+	tmpVal = 4095 / tmpVal - 1;
+	tmpVal = 10000 / tmpVal;
 	//Výpočet teploty podle vztahu pro beta faktor
-	float teplota;
-	teplota = napeti / 10000;         // (R/Ro)
+	float temperature;
+	temperature = tmpVal / 10000;         		// (R/Ro)
 
-	teplota = log(teplota);             // ln(R/Ro)
+	temperature = log(temperature);             // ln(R/Ro)
 
-	teplota /= 3977;                    // 1/B * ln(R/Ro)
-	teplota += 1.0 / (refTep + 273.15); // + (1/To)
-	teplota = 1.0 / teplota;            // Převrácená hodnota
-	teplota -= 273.15;                  // Převod z Kelvinů na stupně Celsia
-	return teplota;
+	temperature /= 3977;                    	// 1/B * ln(R/Ro)
+	temperature += 1.0 / (refTep + 273.15); 	// + (1/To)
+	temperature = 1.0 / temperature;            // Převrácená hodnota
+	temperature -= 273.15;                  // Převod z Kelvinů na stupně Celsia
+	return temperature;
+}
+
+checkCellVoltage() {
+	if (cell1.voltage < 3 || cell2.voltage < 3 || cell3.voltage < 3
+			|| cell4.voltage < 3)
+		exit();
+}
+checkCurrent() {
+	if (currentDischarge.currValue > 2)
+		exit();
+}
+checkTemperature() {
+	if (tempCell.currValue > 50)
+		exit();
+	else if (tempBalancer.currValue > 50)
+		exit();
+
+}
+checkDeviceTurnedOnTime() {
+	if (OnHours > 200)
+		exit();
 }

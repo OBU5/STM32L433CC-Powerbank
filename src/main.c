@@ -166,6 +166,11 @@ int main(void) {
 		HAL_Delay(10);
 		HAL_ADC_Start_IT(&hadc1);
 		checkCharger();
+		checkCellVoltage();
+		checkCurrent();
+		checkTemperature();
+		checkDeviceTurnedOnTime();
+
 		/* USER CODE BEGIN 3 */
 
 	}
